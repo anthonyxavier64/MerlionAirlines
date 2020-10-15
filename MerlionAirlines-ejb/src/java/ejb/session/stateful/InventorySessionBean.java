@@ -15,5 +15,4 @@ import javax.ejb.Stateful;
 public class InventorySessionBean implements InventorySessionBeanRemote, InventorySessionBeanLocal {
     private int numSeats;
     private int hi;
-
 }
