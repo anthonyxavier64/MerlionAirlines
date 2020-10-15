@@ -13,6 +13,10 @@ import javax.ejb.Stateful;
  */
 @Stateful
 public class InventorySessionBean implements InventorySessionBeanRemote, InventorySessionBeanLocal {
+<<<<<<< HEAD
     private int numSeats;
 
+=======
+    abcde
+>>>>>>> af5ddc1a3d6da4e41f41e758cf06ca1caa260416
 }
