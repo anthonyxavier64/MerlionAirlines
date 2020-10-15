@@ -14,7 +14,4 @@ import javax.ejb.Stateful;
 @Stateful
 public class InventorySessionBean implements InventorySessionBeanRemote, InventorySessionBeanLocal {
 
-    public void print() {
-        System.out.println("HELLO");
-    }
 }
