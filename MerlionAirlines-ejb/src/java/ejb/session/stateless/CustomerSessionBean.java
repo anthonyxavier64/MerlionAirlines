@@ -13,7 +13,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class CustomerSessionBean implements CustomerSessionBeanRemote, CustomerSessionBeanLocal {
-
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }
