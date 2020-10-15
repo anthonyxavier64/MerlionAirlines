@@ -18,6 +18,7 @@
 *.zip
 *.tar.gz
 *.rar
+glassfish-resource.xml
 
 # User defined
 nbproject/private/
