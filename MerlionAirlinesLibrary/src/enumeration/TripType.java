@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.stateful;
-
-import javax.ejb.Stateful;
+package enumeration;
 
 /**
  *
  * @author yappeizhen
  */
-@Stateful
-public class InventorySessionBean implements InventorySessionBeanRemote, InventorySessionBeanLocal {
-    private int numSeats;
-    private int hi;
-
+public enum TripType {
+    ONEWAY, ROUNDTRIP;
 }
