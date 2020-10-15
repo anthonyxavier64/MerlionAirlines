@@ -13,5 +13,5 @@ import javax.ejb.Stateful;
  */
 @Stateful
 public class InventorySessionBean implements InventorySessionBeanRemote, InventorySessionBeanLocal {
-    
+    abcde
 }
