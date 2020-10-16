@@ -7,11 +7,14 @@ package entity;
 
 import enumeration.TripType;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -28,7 +31,8 @@ public class Flight implements Serializable {
     private String flightNumber;
     private TripType tripType;
     private boolean enabled;
-    
+    @OneToMany(mappedBy = "flight")
+    private List<FlightSchedulePlan> flightSchedulePlans = new ArrayList<FlightSchedulePlan>();
     @ManyToOne
     private FlightRoute flightRoute;
 
@@ -106,5 +110,12 @@ public class Flight implements Serializable {
     public void setFlightRoute(FlightRoute flightRoute) {
         this.flightRoute = flightRoute;
     }
-    
+
+    public List<FlightSchedulePlan> getFlightSchedulePlans() {
+        return flightSchedulePlans;
+    }
+
+    public void setFlightSchedulePlans(List<FlightSchedulePlan> flightSchedulePlans) {
+        this.flightSchedulePlans = flightSchedulePlans;
+    }
 }
