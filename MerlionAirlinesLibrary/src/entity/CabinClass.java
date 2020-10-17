@@ -5,6 +5,7 @@
  */
 package entity;
 
+import enumeration.CabinType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +30,14 @@ public class CabinClass implements Serializable {
     private int numRows;
     private int numSeatsAbreast;
     private String configPerColumn;
+    private CabinType cabinType;
     @OneToMany(mappedBy = "cabinClass")
     private List<Fare> fares = new ArrayList<Fare>();
 
     public CabinClass() {
     }
 
-    public CabinClass(int numAisles, int numRows, int numSeatsAbreast, int[] configArray) {
+    public CabinClass(int numAisles, int numRows, int numSeatsAbreast, int[] configArray, CabinType cabinType) {
         this.numAisles = numAisles;
         this.numRows = numRows;
         this.numSeatsAbreast = numSeatsAbreast;
@@ -43,6 +45,7 @@ public class CabinClass implements Serializable {
         for (int i = 1; i < configArray.length; i++) { 
             this.configPerColumn += "-" + configArray[i];
         }
+        this.cabinType = cabinType;
     }
 
     public Long getCabinClassID() {
@@ -116,5 +119,13 @@ public class CabinClass implements Serializable {
 
     public void setFares(List<Fare> fares) {
         this.fares = fares;
+    }
+
+    public CabinType getCabinType() {
+        return cabinType;
+    }
+
+    public void setCabinType(CabinType cabinType) {
+        this.cabinType = cabinType;
     }
 }
