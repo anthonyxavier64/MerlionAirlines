@@ -9,10 +9,12 @@ import enumeration.TripType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -27,13 +29,28 @@ public class Flight implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(unique = true, nullable = false)
+    private Long flightID;
+    
+    @Column(unique = true, nullable = false)
     private String flightNumber;
+    
+    @Column(nullable = false)
     private TripType tripType;
+    
+    @Column(nullable = false)
     private boolean enabled;
+    
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private AircraftConfiguration aircraftConfiguration;
+    
     @OneToMany(mappedBy = "flight")
+    @JoinColumn(nullable = false)
     private List<FlightSchedulePlan> flightSchedulePlans = new ArrayList<FlightSchedulePlan>();
-    @ManyToOne
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private FlightRoute flightRoute;
 
     public Flight() {
@@ -46,29 +63,29 @@ public class Flight implements Serializable {
         this.enabled = true;
     }
     
-    public Long getId() {
-        return id;
+    public Long getFlightID() {
+        return flightID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFlightID(Long flightID) {
+        this.flightID = flightID;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (flightID != null ? flightID.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the flightID fields are not set
         if (!(object instanceof Flight)) {
             return false;
         }
         Flight other = (Flight) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.flightID == null && other.flightID != null) || (this.flightID != null && !this.flightID.equals(other.flightID))) {
             return false;
         }
         return true;
@@ -76,7 +93,7 @@ public class Flight implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Flight[ id=" + id + " ]";
+        return "entity.Flight[ id=" + flightID + " ]";
     }
 
     public String getFlightNumber() {
@@ -117,5 +134,13 @@ public class Flight implements Serializable {
 
     public void setFlightSchedulePlans(List<FlightSchedulePlan> flightSchedulePlans) {
         this.flightSchedulePlans = flightSchedulePlans;
+    }
+
+    public AircraftConfiguration getAircraftConfiguration() {
+        return aircraftConfiguration;
+    }
+
+    public void setAircraftConfiguration(AircraftConfiguration aircraftConfiguration) {
+        this.aircraftConfiguration = aircraftConfiguration;
     }
 }

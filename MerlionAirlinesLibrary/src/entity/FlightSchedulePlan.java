@@ -8,10 +8,12 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -26,14 +28,27 @@ public class FlightSchedulePlan implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long flightSchedulePlanID;
+    
+    @Column(unique = true, nullable = false)
     private String flightNumber;
+    
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Flight flight;
+    
     @OneToMany(mappedBy = "flightSchedule")
+    @JoinColumn(nullable = false)
     private List<FlightSchedule>  flightSchedules = new ArrayList<FlightSchedule>();
+    
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private Fare fare;
+    
     @OneToOne(mappedBy = "complementaryFlightSchedulePlan")
-    private FlightSchedulePlan flighSchedulePlan;
+    private FlightSchedulePlan flightSchedulePlan;
+    
     @OneToOne
     private FlightSchedulePlan complementaryFlightSchedulePlan;
 
@@ -101,12 +116,12 @@ public class FlightSchedulePlan implements Serializable {
         this.flight = flight;
     }
 
-    public FlightSchedulePlan getFlighSchedulePlan() {
-        return flighSchedulePlan;
+    public FlightSchedulePlan getFlightSchedulePlan() {
+        return flightSchedulePlan;
     }
 
-    public void setFlighSchedulePlan(FlightSchedulePlan flighSchedulePlan) {
-        this.flighSchedulePlan = flighSchedulePlan;
+    public void setFlightSchedulePlan(FlightSchedulePlan flighSchedulePlan) {
+        this.flightSchedulePlan = flighSchedulePlan;
     }
 
     public FlightSchedulePlan getComplementaryFlightSchedulePlan() {
@@ -115,5 +130,13 @@ public class FlightSchedulePlan implements Serializable {
 
     public void setComplementaryFlightSchedulePlan(FlightSchedulePlan complementaryFlightSchedulePlan) {
         this.complementaryFlightSchedulePlan = complementaryFlightSchedulePlan;
+    }
+
+    public Fare getFare() {
+        return fare;
+    }
+
+    public void setFare(Fare fare) {
+        this.fare = fare;
     }
 }

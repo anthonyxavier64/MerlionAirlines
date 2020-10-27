@@ -9,6 +9,7 @@ import exception.FlightRouteAddFlightException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,8 +28,10 @@ public class FlightRoute implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long flightRouteId;
     
+    @Column(unique = true, nullable = false)
     private boolean enabled;
     
     @ManyToOne(optional = false)
@@ -40,6 +43,7 @@ public class FlightRoute implements Serializable {
     private Airport destination;
     
     @OneToMany(mappedBy = "flightRoute")
+    @JoinColumn(nullable = false)
     private List<Flight> flights = new ArrayList<>();
     
     public FlightRoute(Airport origin, Airport destination) {

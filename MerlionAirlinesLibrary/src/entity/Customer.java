@@ -28,14 +28,24 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
+    @Column(unique = true, nullable = false)
+    private Long customerID;
+    
+    @Column(nullable = false)
     private String firstName;
+    
+    @Column(nullable = false)
     private String lastName;
+    
+    @Column(nullable = false)
     private String email;
     
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
+    
+    @Column(nullable = false)
     private String password;
+    
     private String creditCardNumber;
     
     @Temporal(TemporalType.DATE)
@@ -43,7 +53,7 @@ public class Customer implements Serializable {
     private Long cvv;
     
     @OneToMany(mappedBy = "customer")
-    private List<FlightTicket> flightTickets = new ArrayList<FlightTicket>();
+    private List<FlightReservation> flightReservations = new ArrayList<>();
     
     public Customer() {
     }
@@ -56,29 +66,29 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getCustomerID() {
+        return customerID;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setCustomerID(Long customerID) {
+        this.customerID = customerID;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (customerId != null ? customerId.hashCode() : 0);
+        hash += (customerID != null ? customerID.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the customerId fields are not set
+        // TODO: Warning - this method won't work in the case the customerID fields are not set
         if (!(object instanceof Customer)) {
             return false;
         }
         Customer other = (Customer) object;
-        if ((this.customerId == null && other.customerId != null) || (this.customerId != null && !this.customerId.equals(other.customerId))) {
+        if ((this.customerID == null && other.customerID != null) || (this.customerID != null && !this.customerID.equals(other.customerID))) {
             return false;
         }
         return true;
@@ -86,7 +96,7 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Customer[ id=" + customerId + " ]";
+        return "entity.Customer[ id=" + customerID + " ]";
     }
 
     public String getFirstName() {
@@ -153,4 +163,11 @@ public class Customer implements Serializable {
         this.cvv = cvv;
     }
     
+    public List<FlightReservation> getFlightReservations() {
+        return flightReservations;
+    }
+
+    public void setFlightReservations(List<FlightReservation> flightReservations) {
+        this.flightReservations = flightReservations;
+    }
 }

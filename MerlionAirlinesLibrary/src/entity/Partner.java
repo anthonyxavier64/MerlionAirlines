@@ -22,10 +22,16 @@ public class Partner implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long partnerID;
+    
+    @Column(unique = true, nullable = false)
     private String name;
-    @Column(unique = true)
+    
+    @Column(unique = true, nullable = false)
     private String username;
+    
+    @Column(nullable = false)
     private String password;
 
     public Partner() {

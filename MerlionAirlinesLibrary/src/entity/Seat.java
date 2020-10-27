@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,26 +20,27 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Seat implements Serializable {
-
-    public SeatInventory getSeatInventory() {
-        return seatInventory;
-    }
-
-    public void setSeatInventory(SeatInventory seatInventory) {
-        this.seatInventory = seatInventory;
-    }
-
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seatId;
+    @Column(unique = true, nullable = false)
+    private Long seatID;
+   
+    @Column(nullable = false)
     private String rowNumber;
+    
+    @Column(nullable = false)
     private String columnNumber;
+    
+    @Column(nullable = false)
     private String seatNumber;
+    
+    @Column(nullable = false)
     private boolean available;
     
-    @ManyToOne (optional = false)
-    @JoinColumn (nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private SeatInventory seatInventory;
     
     public Seat() {
@@ -51,29 +53,37 @@ public class Seat implements Serializable {
         this.available = true;
     }
 
-    public Long getSeatId() {
-        return seatId;
+    public SeatInventory getSeatInventory() {
+        return seatInventory;
     }
 
-    public void setSeatId(Long seatId) {
-        this.seatId = seatId;
+    public void setSeatInventory(SeatInventory seatInventory) {
+        this.seatInventory = seatInventory;
+    }
+    
+    public Long getSeatID() {
+        return seatID;
+    }
+
+    public void setSeatID(Long seatID) {
+        this.seatID = seatID;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (seatId != null ? seatId.hashCode() : 0);
+        hash += (seatID != null ? seatID.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the seatId fields are not set
+        // TODO: Warning - this method won't work in the case the seatID fields are not set
         if (!(object instanceof Seat)) {
             return false;
         }
         Seat other = (Seat) object;
-        if ((this.seatId == null && other.seatId != null) || (this.seatId != null && !this.seatId.equals(other.seatId))) {
+        if ((this.seatID == null && other.seatID != null) || (this.seatID != null && !this.seatID.equals(other.seatID))) {
             return false;
         }
         return true;
@@ -81,7 +91,7 @@ public class Seat implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Seat[ id=" + seatId + " ]";
+        return "entity.Seat[ id=" + seatID + " ]";
     }
 
     public String getRowNumber() {

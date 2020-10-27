@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,9 +25,15 @@ public class AircraftType implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(unique = true, nullable = false)
+    private Long aircraftTypeID;
+    
+    @Column(unique = true, nullable = false)
     private String aircraftTypeName;
+    
+    @Column(nullable = false)
     private int maxPassengers;
+    
     @OneToMany(mappedBy = "aircraftType")
     private List<AircraftConfiguration> aircraftConfigurations = new ArrayList<AircraftConfiguration>(); 
 
@@ -38,29 +45,29 @@ public class AircraftType implements Serializable {
         this.maxPassengers = maxPassengers;
     }
     
-    public Long getId() {
-        return id;
+    public Long getAircraftTypeID() {
+        return aircraftTypeID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAircraftTypeID(Long aircraftTypeID) {
+        this.aircraftTypeID = aircraftTypeID;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (aircraftTypeID != null ? aircraftTypeID.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the aircraftTypeID fields are not set
         if (!(object instanceof AircraftType)) {
             return false;
         }
         AircraftType other = (AircraftType) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.aircraftTypeID == null && other.aircraftTypeID != null) || (this.aircraftTypeID != null && !this.aircraftTypeID.equals(other.aircraftTypeID))) {
             return false;
         }
         return true;
@@ -68,7 +75,7 @@ public class AircraftType implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.AircraftType[ id=" + id + " ]";
+        return "entity.AircraftType[ id=" + aircraftTypeID + " ]";
     }
 
     public String getAircraftTypeName() {

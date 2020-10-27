@@ -5,37 +5,56 @@
  */
 package entity;
 
+import enumeration.CabinClassType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author Antho
  */
 @Entity
-public class CabinClass implements Serializable {
+public class CabinClassConfiguration implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long cabinClassID;
+    
+    @Column(nullable = false)
     private int numAisles;
+    
+    @Column(nullable = false)
     private int numRows;
+    
+    @Column(nullable = false)
     private int numSeatsAbreast;
+    
+    @Column(nullable = false)
     private String configPerColumn;
-    @OneToMany(mappedBy = "cabinClass")
-    private List<Fare> fares = new ArrayList<Fare>();
+    
+    @Column(nullable = false)
+    private List<CabinClassType> cabinClasses = new ArrayList<>();
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private AircraftConfiguration aircraftConfiguration;
+    
 
-    public CabinClass() {
+    public CabinClassConfiguration() {
     }
 
-    public CabinClass(int numAisles, int numRows, int numSeatsAbreast, int[] configArray) {
+    public CabinClassConfiguration(int numAisles, int numRows, int numSeatsAbreast, int[] configArray) {
         this.numAisles = numAisles;
         this.numRows = numRows;
         this.numSeatsAbreast = numSeatsAbreast;
@@ -43,6 +62,22 @@ public class CabinClass implements Serializable {
         for (int i = 1; i < configArray.length; i++) { 
             this.configPerColumn += "-" + configArray[i];
         }
+    }
+
+    public List<CabinClassType> getCabinClasses() {
+        return cabinClasses;
+    }
+
+    public void setCabinClasses(List<CabinClassType> cabinClasses) {
+        this.cabinClasses = cabinClasses;
+    }
+
+    public AircraftConfiguration getAircraftConfiguration() {
+        return aircraftConfiguration;
+    }
+
+    public void setAircraftConfiguration(AircraftConfiguration aircraftConfiguration) {
+        this.aircraftConfiguration = aircraftConfiguration;
     }
 
     public Long getCabinClassID() {
@@ -63,10 +98,10 @@ public class CabinClass implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the cabinClassID fields are not set
-        if (!(object instanceof CabinClass)) {
+        if (!(object instanceof CabinClassConfiguration)) {
             return false;
         }
-        CabinClass other = (CabinClass) object;
+        CabinClassConfiguration other = (CabinClassConfiguration) object;
         if ((this.cabinClassID == null && other.cabinClassID != null) || (this.cabinClassID != null && !this.cabinClassID.equals(other.cabinClassID))) {
             return false;
         }
@@ -108,13 +143,5 @@ public class CabinClass implements Serializable {
 
     public void setConfigPerColumn(String configPerColumn) {
         this.configPerColumn = configPerColumn;
-    }
-
-    public List<Fare> getFares() {
-        return fares;
-    }
-
-    public void setFares(List<Fare> fares) {
-        this.fares = fares;
     }
 }

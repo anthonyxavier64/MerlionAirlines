@@ -9,11 +9,14 @@ import exception.SeatInventoryAddSeatException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -24,21 +27,31 @@ public class SeatInventory implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
+    private Long seatInventoryID;
     
     @OneToMany(mappedBy = "seatInventory")
+    @JoinColumn(nullable = false)
     private List<Seat> seats = new ArrayList<>();
+    
+    @OneToOne(mappedBy = "seatInventory")
+    @JoinColumn(nullable = false)
+    private FlightSchedule flightSchedule;
+    
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private CabinClassConfiguration cabinClassConfiguration;
 
     public SeatInventory() {
     }
     
-    public Long getId() {
-        return id;
+    public Long getSeatInventoryID() {
+        return seatInventoryID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSeatInventoryID(Long seatInventoryID) {
+        this.seatInventoryID = seatInventoryID;
     }
     
     public void addSeat(Seat seat) throws SeatInventoryAddSeatException {
@@ -53,18 +66,18 @@ public class SeatInventory implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (seatInventoryID != null ? seatInventoryID.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the seatInventoryID fields are not set
         if (!(object instanceof SeatInventory)) {
             return false;
         }
         SeatInventory other = (SeatInventory) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.seatInventoryID == null && other.seatInventoryID != null) || (this.seatInventoryID != null && !this.seatInventoryID.equals(other.seatInventoryID))) {
             return false;
         }
         return true;
@@ -72,7 +85,7 @@ public class SeatInventory implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.SeatInventory[ id=" + id + " ]";
+        return "entity.SeatInventory[ id=" + seatInventoryID + " ]";
     }
 
     public List<Seat> getSeats() {
@@ -82,5 +95,20 @@ public class SeatInventory implements Serializable {
     public void setSeats(List<Seat> seats) {
         this.seats = seats;
     }
-    
+
+    public FlightSchedule getFlightSchedule() {
+        return flightSchedule;
+    }
+
+    public void setFlightSchedule(FlightSchedule flightSchedule) {
+        this.flightSchedule = flightSchedule;
+    }
+
+    public CabinClassConfiguration getCabinClassConfiguration() {
+        return cabinClassConfiguration;
+    }
+
+    public void setCabinClassConfiguration(CabinClassConfiguration cabinClassConfiguration) {
+        this.cabinClassConfiguration = cabinClassConfiguration;
+    }   
 }

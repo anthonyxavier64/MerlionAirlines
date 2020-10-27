@@ -5,7 +5,9 @@
  */
 package entity;
 
+import enumeration.CabinClassType;
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,11 +25,16 @@ public class Fare implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long fareID;
-    @ManyToOne
-    private CabinClass cabinClass;
-    private String cabinClassName;
+    
+    @Column(unique = true, nullable = false)
+    private CabinClassType cabinClassType;
+    
+    @Column(unique = true, nullable = false)
     private String fareBasisCode;
+    
+    @Column(nullable = false)
     private double fareAmount;
 
     public Fare() {
@@ -71,22 +78,6 @@ public class Fare implements Serializable {
         return "entity.Fare[ id=" + fareID + " ]";
     }
 
-    public CabinClass getCabinClass() {
-        return cabinClass;
-    }
-
-    public void setCabinClass(CabinClass cabinClass) {
-        this.cabinClass = cabinClass;
-    }
-
-    public String getCabinClassName() {
-        return cabinClassName;
-    }
-
-    public void setCabinClassName(String cabinClassName) {
-        this.cabinClassName = cabinClassName;
-    }
-
     public String getFareBasisCode() {
         return fareBasisCode;
     }
@@ -101,5 +92,13 @@ public class Fare implements Serializable {
 
     public void setFareAmount(double fareAmount) {
         this.fareAmount = fareAmount;
+    }
+
+    public CabinClassType getCabinClassType() {
+        return cabinClassType;
+    }
+
+    public void setCabinClassType(CabinClassType cabinClassType) {
+        this.cabinClassType = cabinClassType;
     }
 }

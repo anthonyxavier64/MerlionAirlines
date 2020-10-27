@@ -7,6 +7,7 @@ package entity;
 
 import enumeration.EmployeeType;
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,11 +25,20 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long employeeID;
+    
+    @Column(nullable = false)
     private String name;
+    
+    @Column(unique = true, nullable = false)
     private String username;
+    
+    @Column(nullable = false)
     private String password;
+    
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private EmployeeType employeeType;
 
     public Employee() {

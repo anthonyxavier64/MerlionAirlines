@@ -6,11 +6,15 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -22,15 +26,24 @@ public class Airport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(unique = true, nullable = false)
+    private Long airportID;
+    
+    @Column(unique = true, nullable = false)
     private String airportName;
     
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String airportCode;
+    
+    @Column(nullable = false)
     private String country;
+    
     private String city;
     private String state;
     private String province;
+    
+    @ManyToMany(mappedBy = "origin") // Store the flight routes that originate from that airport
+    private List<FlightRoute> flightRoutes = new ArrayList<>();
 
     public Airport() {
     }
@@ -44,29 +57,29 @@ public class Airport implements Serializable {
         this.province = province;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAirportID() {
+        return airportID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAirportID(Long airportID) {
+        this.airportID = airportID;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (airportID != null ? airportID.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the airportID fields are not set
         if (!(object instanceof Airport)) {
             return false;
         }
         Airport other = (Airport) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.airportID == null && other.airportID != null) || (this.airportID != null && !this.airportID.equals(other.airportID))) {
             return false;
         }
         return true;
@@ -74,7 +87,7 @@ public class Airport implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Airport[ id=" + id + " ]";
+        return "entity.Airport[ id=" + airportID + " ]";
     }
 
     public String getAirportName() {
