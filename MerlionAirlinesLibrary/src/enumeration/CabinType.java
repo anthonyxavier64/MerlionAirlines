@@ -7,8 +7,11 @@ package enumeration;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
-public enum CabinClassType {
-    ECONOMY, PREMIUMECONOMY, BUSINESS, FIRST;
+public enum CabinType {
+    FIRST_CLASS,
+    BUSINESS,
+    PREMIUM_ECONOMY,
+    ECONOMY
 }

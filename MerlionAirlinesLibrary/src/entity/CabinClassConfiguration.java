@@ -5,7 +5,7 @@
  */
 package entity;
 
-import enumeration.CabinClassType;
+import enumeration.CabinType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,17 +44,20 @@ public class CabinClassConfiguration implements Serializable {
     private String configPerColumn;
     
     @Column(nullable = false)
-    private List<CabinClassType> cabinClasses = new ArrayList<>();
+    private List<CabinType> cabinClasses = new ArrayList<>();
     
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private AircraftConfiguration aircraftConfiguration;
     
-
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private Fare fare;
+    
     public CabinClassConfiguration() {
     }
 
-    public CabinClassConfiguration(int numAisles, int numRows, int numSeatsAbreast, int[] configArray) {
+    public CabinClassConfiguration(int numAisles, int numRows, int numSeatsAbreast, int[] configArray, CabinType cabinType) {
         this.numAisles = numAisles;
         this.numRows = numRows;
         this.numSeatsAbreast = numSeatsAbreast;
@@ -63,12 +66,12 @@ public class CabinClassConfiguration implements Serializable {
             this.configPerColumn += "-" + configArray[i];
         }
     }
-
-    public List<CabinClassType> getCabinClasses() {
+    
+    public List<CabinType> getCabinClasses() {
         return cabinClasses;
     }
 
-    public void setCabinClasses(List<CabinClassType> cabinClasses) {
+    public void setCabinClasses(List<CabinType> cabinClasses) {
         this.cabinClasses = cabinClasses;
     }
 
@@ -144,4 +147,4 @@ public class CabinClassConfiguration implements Serializable {
     public void setConfigPerColumn(String configPerColumn) {
         this.configPerColumn = configPerColumn;
     }
-}
+    }

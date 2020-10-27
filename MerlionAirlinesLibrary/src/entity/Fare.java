@@ -5,7 +5,7 @@
  */
 package entity;
 
-import enumeration.CabinClassType;
+import enumeration.CabinType;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ public class Fare implements Serializable {
     private Long fareID;
     
     @Column(unique = true, nullable = false)
-    private CabinClassType cabinClassType;
+    private CabinType cabinType;
     
     @Column(unique = true, nullable = false)
     private String fareBasisCode;
@@ -94,11 +94,11 @@ public class Fare implements Serializable {
         this.fareAmount = fareAmount;
     }
 
-    public CabinClassType getCabinClassType() {
-        return cabinClassType;
+    public CabinType getCabinType() {
+        return cabinType;
     }
 
-    public void setCabinClassType(CabinClassType cabinClassType) {
-        this.cabinClassType = cabinClassType;
+    public void setCabinClassType(CabinType cabinClassType) {
+        this.cabinType = cabinClassType;
     }
 }

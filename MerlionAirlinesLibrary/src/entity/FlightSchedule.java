@@ -54,14 +54,14 @@ public class FlightSchedule implements Serializable {
     @Column(unique = true, nullable = false)
     private Date endDate;
     
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private FlightSchedulePlan flightSchedulePlan;
     
     @OneToMany(mappedBy = "flightSchedule")
     private List<FlightReservation> flightReservations = new ArrayList<FlightReservation>();
     
-    @OneToOne(optional = false)
+    @OneToOne
     @JoinColumn(nullable = false)
     private SeatInventory seatInventory;
     

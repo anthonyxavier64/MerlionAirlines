@@ -41,7 +41,7 @@ public class Flight implements Serializable {
     @Column(nullable = false)
     private boolean enabled;
     
-    @OneToOne(optional = false)
+    @OneToOne
     @JoinColumn(nullable = false)
     private AircraftConfiguration aircraftConfiguration;
     
@@ -49,7 +49,7 @@ public class Flight implements Serializable {
     @JoinColumn(nullable = false)
     private List<FlightSchedulePlan> flightSchedulePlans = new ArrayList<FlightSchedulePlan>();
     
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private FlightRoute flightRoute;
 

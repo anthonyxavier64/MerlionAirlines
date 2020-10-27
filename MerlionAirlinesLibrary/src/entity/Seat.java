@@ -39,7 +39,7 @@ public class Seat implements Serializable {
     @Column(nullable = false)
     private boolean available;
     
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private SeatInventory seatInventory;
     
