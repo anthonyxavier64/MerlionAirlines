@@ -29,7 +29,7 @@ public class AircraftType implements Serializable {
     private Long aircraftTypeID;
     
     @Column(unique = true, nullable = false)
-    private String aircraftTypeName;
+    private String aircraftTypeNameeee;
     
     @Column(nullable = false)
     private int maxPassengers;
