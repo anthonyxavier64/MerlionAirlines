@@ -36,7 +36,7 @@ public class AircraftConfiguration implements Serializable {
     @Column(nullable = false)
     private int numCabinClasses;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private AircraftType aircraftType;
     
