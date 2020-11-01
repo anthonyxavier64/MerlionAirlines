@@ -29,7 +29,7 @@ public class AircraftType implements Serializable {
     private Long aircraftTypeID;
     
     @Column(unique = true, nullable = false)
-    private String aircraftTypeName;
+    private String aircraftTypeNameee;
     
     @Column(nullable = false)
     private int maxPassengers;
@@ -41,7 +41,7 @@ public class AircraftType implements Serializable {
     }
 
     public AircraftType(String aircraftTypeName, int maxPassengers) {
-        this.aircraftTypeName = aircraftTypeName;
+        this.aircraftTypeNameee = aircraftTypeName;
         this.maxPassengers = maxPassengers;
     }
     
@@ -78,12 +78,12 @@ public class AircraftType implements Serializable {
         return "entity.AircraftType[ id=" + aircraftTypeID + " ]";
     }
 
-    public String getAircraftTypeName() {
-        return aircraftTypeName;
+    public String getAircraftTypeNameee() {
+        return aircraftTypeNameee;
     }
 
-    public void setAircraftTypeName(String aircraftTypeName) {
-        this.aircraftTypeName = aircraftTypeName;
+    public void setAircraftTypeNameee(String aircraftTypeNameee) {
+        this.aircraftTypeNameee = aircraftTypeNameee;
     }
 
     public long getMaxPassengers() {
