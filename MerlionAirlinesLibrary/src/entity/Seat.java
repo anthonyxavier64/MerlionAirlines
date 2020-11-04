@@ -8,11 +8,13 @@ package entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -39,9 +41,15 @@ public class Seat implements Serializable {
     @Column(nullable = false)
     private boolean available;
     
-    @ManyToOne
+    @OneToOne
+    private Passenger passenger;
+    
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private SeatInventory seatInventory;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    private FlightReservation flightReservation;
     
     public Seat() {
     }
@@ -124,6 +132,22 @@ public class Seat implements Serializable {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public Passenger getPassenger() {
+        return passenger;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
+
+    public FlightReservation getFlightReservation() {
+        return flightReservation;
+    }
+
+    public void setFlightReservation(FlightReservation flightReservation) {
+        this.flightReservation = flightReservation;
     }
     
 }

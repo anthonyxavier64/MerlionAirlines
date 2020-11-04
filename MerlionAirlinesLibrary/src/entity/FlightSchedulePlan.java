@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,22 +35,17 @@ public class FlightSchedulePlan implements Serializable {
     @Column(unique = true, nullable = false)
     private String flightNumber;
     
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Flight flight;
     
     @OneToMany(mappedBy = "flightSchedule")
-    @JoinColumn(nullable = false)
     private List<FlightSchedule>  flightSchedules = new ArrayList<FlightSchedule>();
     
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private Fare fare;
+    @OneToMany
+    private List<Fare> fares = new ArrayList<>();
     
-    @OneToOne(mappedBy = "complementaryFlightSchedulePlan")
-    private FlightSchedulePlan flightSchedulePlan;
-    
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private FlightSchedulePlan complementaryFlightSchedulePlan;
 
     public FlightSchedulePlan() {
@@ -116,14 +112,6 @@ public class FlightSchedulePlan implements Serializable {
         this.flight = flight;
     }
 
-    public FlightSchedulePlan getFlightSchedulePlan() {
-        return flightSchedulePlan;
-    }
-
-    public void setFlightSchedulePlan(FlightSchedulePlan flighSchedulePlan) {
-        this.flightSchedulePlan = flighSchedulePlan;
-    }
-
     public FlightSchedulePlan getComplementaryFlightSchedulePlan() {
         return complementaryFlightSchedulePlan;
     }
@@ -132,11 +120,12 @@ public class FlightSchedulePlan implements Serializable {
         this.complementaryFlightSchedulePlan = complementaryFlightSchedulePlan;
     }
 
-    public Fare getFare() {
-        return fare;
+    public List<Fare> getFares() {
+        return fares;
     }
 
-    public void setFare(Fare fare) {
-        this.fare = fare;
+    public void setFares(List<Fare> fares) {
+        this.fares = fares;
     }
+    
 }

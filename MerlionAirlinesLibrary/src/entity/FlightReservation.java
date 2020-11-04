@@ -6,13 +6,17 @@
 package entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -27,14 +31,30 @@ public class FlightReservation implements Serializable {
     @Column(unique = true, nullable = false)
     private Long flightReservationID;
     
-    @ManyToOne
+    @Column(nullable = false)
+    BigDecimal totalAmount;
+    
+    private String partnerName;
+    
+    @OneToMany(mappedBy = "flightReservation")
+    private List<Seat> seats;
+    
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightSchedule flightSchedule;
     
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private Customer customer;
+    private Customer customer; // Person who made the booking   
 
+    public FlightReservation() {
+    }
+    
+    public FlightReservation(BigDecimal totalAmount, String partnerName) {
+        this.totalAmount = totalAmount;
+        this.partnerName = partnerName;
+    }
+    
     public Long getFlightReservationID() {
         return flightReservationID;
     }
@@ -82,6 +102,22 @@ public class FlightReservation implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
     }
     
 }

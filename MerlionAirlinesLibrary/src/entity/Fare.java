@@ -7,11 +7,14 @@ package entity;
 
 import enumeration.CabinType;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -35,16 +38,23 @@ public class Fare implements Serializable {
     private String fareBasisCode;
     
     @Column(nullable = false)
-    private double fareAmount;
-
+    private BigDecimal fareAmount;
+    
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private CabinClassConfiguration cabinClassConfiguration;
+    
     public Fare() {
     }
 
-    public Fare(String fareBasisCode, double fareAmount, String cabinClassName) {
+    public Fare(CabinType cabinType, String fareBasisCode, BigDecimal fareAmount) {
+        this.cabinType = cabinType;
         this.fareBasisCode = fareBasisCode;
         this.fareAmount = fareAmount;
     }
 
+    
+    
     public Long getFareID() {
         return fareID;
     }
@@ -86,11 +96,11 @@ public class Fare implements Serializable {
         this.fareBasisCode = fareBasisCode;
     }
 
-    public double getFareAmount() {
+    public BigDecimal getFareAmount() {
         return fareAmount;
     }
 
-    public void setFareAmount(double fareAmount) {
+    public void setFareAmount(BigDecimal fareAmount) {
         this.fareAmount = fareAmount;
     }
 
@@ -100,5 +110,13 @@ public class Fare implements Serializable {
 
     public void setCabinClassType(CabinType cabinClassType) {
         this.cabinType = cabinClassType;
+    }
+
+    public CabinClassConfiguration getCabinClassConfiguration() {
+        return cabinClassConfiguration;
+    }
+
+    public void setCabinClassConfiguration(CabinClassConfiguration cabinClassConfiguration) {
+        this.cabinClassConfiguration = cabinClassConfiguration;
     }
 }

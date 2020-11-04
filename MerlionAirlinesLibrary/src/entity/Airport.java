@@ -137,5 +137,15 @@ public class Airport implements Serializable {
     public void setProvince(String province) {
         this.province = province;
     }
+
+    public List<FlightRoute> getFlightRoutes() {
+        return flightRoutes;
+    }
+
+    public void setFlightRoutes(List<FlightRoute> flightRoutes) {
+        this.flightRoutes = flightRoutes;
+    }
+    
+    
     
 }

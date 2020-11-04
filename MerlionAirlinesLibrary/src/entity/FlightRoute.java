@@ -11,12 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -34,18 +36,20 @@ public class FlightRoute implements Serializable {
     @Column(unique = true, nullable = false)
     private boolean enabled;
     
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Airport origin;
     
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Airport destination;
     
     @OneToMany(mappedBy = "flightRoute")
-    @JoinColumn(nullable = false)
     private List<Flight> flights = new ArrayList<>();
     
+    @OneToOne(fetch = FetchType.LAZY)
+    private FlightRoute complementaryFlightRoute;
+   
     public FlightRoute(Airport origin, Airport destination) {
         this.enabled = true;
         this.origin = origin;
@@ -103,6 +107,38 @@ public class FlightRoute implements Serializable {
 
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
+    }
+
+    public FlightRoute getComplementaryFlightRoute() {
+        return complementaryFlightRoute;
+    }
+
+    public void setComplementaryFlightRoute(FlightRoute complementaryFlightRoute) {
+        this.complementaryFlightRoute = complementaryFlightRoute;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Airport getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Airport origin) {
+        this.origin = origin;
+    }
+
+    public Airport getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Airport destination) {
+        this.destination = destination;
     }
     
 }

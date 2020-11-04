@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,32 +39,31 @@ public class FlightSchedule implements Serializable {
     private Date departureDate;
     
     @Column(unique = true, nullable = false)
-    private int departureTime; // in 24hrs format
+    private Integer departureTime; // in 24hrs format
     
     @Column(unique = true, nullable = false)
-    private int duration; // converted to minutes but in the UI will ask for hours and minutes
+    private Integer duration; // converted to minutes but in the UI will ask for hours and minutes
     
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(unique = true, nullable = false)
     private Date arrivalDate;
     
     @Column(unique = true, nullable = false)
-    private int arrivalTime;
+    private Integer arrivalTime;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(unique = true, nullable = false)
     private Date endDate;
     
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightSchedulePlan flightSchedulePlan;
     
     @OneToMany(mappedBy = "flightSchedule")
     private List<FlightReservation> flightReservations = new ArrayList<FlightReservation>();
     
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private SeatInventory seatInventory;
+    @OneToMany(mappedBy = "flightSchedule")
+    private List<SeatInventory> seatInventories;
     
     public FlightSchedule() {
     }

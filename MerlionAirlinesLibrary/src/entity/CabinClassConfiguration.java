@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -32,28 +34,30 @@ public class CabinClassConfiguration implements Serializable {
     private Long cabinClassID;
     
     @Column(nullable = false)
-    private int numAisles;
+    private Integer numAisles;
     
     @Column(nullable = false)
-    private int numRows;
+    private Integer numRows;
     
     @Column(nullable = false)
-    private int numSeatsAbreast;
+    private Integer numSeatsAbreast;
     
     @Column(nullable = false)
     private String configPerColumn;
     
     @Column(nullable = false)
-    private List<CabinType> cabinClasses = new ArrayList<>();
+    private CabinType cabinType;
     
-    @ManyToOne
+    @Column(nullable = false)
+    List<String> seatNumbers = new ArrayList<>();
+    
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private AircraftConfiguration aircraftConfiguration;
     
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private Fare fare;
-    
+    @OneToMany(mappedBy = "cabinClassConfiguration")
+    private List<Fare> fares = new ArrayList<>();
+   
     public CabinClassConfiguration() {
     }
 
@@ -66,15 +70,32 @@ public class CabinClassConfiguration implements Serializable {
             this.configPerColumn += "-" + configArray[i];
         }
     }
+
+    public CabinType getCabinType() {
+        return cabinType;
+    }
+
+    public void setCabinType(CabinType cabinType) {
+        this.cabinType = cabinType;
+    }
+
+    public List<String> getSeatNumbers() {
+        return seatNumbers;
+    }
+
+    public void setSeatNumbers(List<String> seatNumbers) {
+        this.seatNumbers = seatNumbers;
+    }
+
+    public List<Fare> getFares() {
+        return fares;
+    }
+
+    public void setFares(List<Fare> fares) {
+        this.fares = fares;
+    }
     
-    public List<CabinType> getCabinClasses() {
-        return cabinClasses;
-    }
-
-    public void setCabinClasses(List<CabinType> cabinClasses) {
-        this.cabinClasses = cabinClasses;
-    }
-
+    
     public AircraftConfiguration getAircraftConfiguration() {
         return aircraftConfiguration;
     }

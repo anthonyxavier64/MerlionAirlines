@@ -32,7 +32,7 @@ public class AircraftType implements Serializable {
     private String aircraftTypeName;
     
     @Column(nullable = false)
-    private int maxPassengers;
+    private Integer maxPassengers;
     
     @OneToMany(mappedBy = "aircraftType")
     private List<AircraftConfiguration> aircraftConfigurations = new ArrayList<AircraftConfiguration>(); 
@@ -41,6 +41,11 @@ public class AircraftType implements Serializable {
     }
 
     public AircraftType(String aircraftTypeName, int maxPassengers) {
+        this.aircraftTypeName = aircraftTypeName;
+        this.maxPassengers = maxPassengers;
+    }
+
+    public AircraftType(String aircraftTypeName, Integer maxPassengers) {
         this.aircraftTypeName = aircraftTypeName;
         this.maxPassengers = maxPassengers;
     }
