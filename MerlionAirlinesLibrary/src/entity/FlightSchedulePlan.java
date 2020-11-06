@@ -36,7 +36,7 @@ public class FlightSchedulePlan implements Serializable {
     @JoinColumn(nullable = false)
     private Flight flight;
 
-    @OneToMany(mappedBy = "flightSchedule")
+    @OneToMany(mappedBy = "flightSchedulePlan")
     private List<FlightSchedule> flightSchedules = new ArrayList<FlightSchedule>();
 
     @OneToMany(mappedBy = "flightSchedulePlan")

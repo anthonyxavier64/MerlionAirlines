@@ -40,7 +40,7 @@ public class SeatInventory implements Serializable {
     @JoinColumn(nullable = false)
     private FlightSchedule flightSchedule;
 
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @NotNull
     private CabinClassConfiguration cabinClassConfiguration;
 
