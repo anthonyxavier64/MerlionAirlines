@@ -29,7 +29,6 @@ public class FlightSchedulePlan implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
     private Long flightSchedulePlanID;
     
     @Column(unique = true, nullable = false)

@@ -30,32 +30,31 @@ public class FlightRoute implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
     private Long flightRouteId;
-    
-    @Column(unique = true, nullable = false)
+
+    @Column(nullable = false)
     private boolean enabled;
-    
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+
+    @OneToOne(optional = false)
     @JoinColumn(nullable = false)
     private Airport origin;
-    
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+
+    @OneToOne
     @JoinColumn(nullable = false)
     private Airport destination;
-    
+
     @OneToMany(mappedBy = "flightRoute")
     private List<Flight> flights = new ArrayList<>();
-    
+
     @OneToOne(fetch = FetchType.LAZY)
     private FlightRoute complementaryFlightRoute;
-   
+
     public FlightRoute(Airport origin, Airport destination) {
         this.enabled = true;
         this.origin = origin;
         this.destination = destination;
     }
-    
+
     public FlightRoute() {
     }
 
@@ -66,14 +65,14 @@ public class FlightRoute implements Serializable {
     public void setFlightRouteId(Long flightRouteId) {
         this.flightRouteId = flightRouteId;
     }
-    
+
     public void addFlight(Flight flight) throws FlightRouteAddFlightException {
         if (flight != null && !this.getFlights().contains(flight)) {
             this.getFlights().add(flight);
         } else {
             throw new FlightRouteAddFlightException("Flight already added to Flight Route");
         }
-        
+
     }
 
     @Override
@@ -140,5 +139,5 @@ public class FlightRoute implements Serializable {
     public void setDestination(Airport destination) {
         this.destination = destination;
     }
-    
+
 }
