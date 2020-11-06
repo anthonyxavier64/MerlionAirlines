@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.Scanner;
 import ejb.session.stateless.AircraftConfigurationSessionBeanRemote;
 import ejb.session.stateless.CabinClassSessionBeanRemote;
+import entity.AircraftConfiguration;
 import enumeration.CabinType;
 import exception.MaximumCapacityExceeded;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -45,13 +44,13 @@ public class FleetManagerMenu {
                     + employee.getEmployeeType()
                     + " rights\n");
             System.out.println("1: Create new aircraft configuration");
-            //System.out.println("2: Open deposit account");
-            //System.out.println("3: Issue ATM card");
+            System.out.println("2: View all aircraft configurations");
+            System.out.println("3: View aircraft configuration details");
             //System.out.println("4: Issue replacement ATM card");
-            System.out.println("2: Logout\n");
+            System.out.println("4: Logout\n");
             response = 0;
 
-            while (response < 1 || response > 2) {
+            while (response < 1 || response > 4) {
                 System.out.print("> ");
                 response = sc.nextInt();
 
@@ -74,12 +73,27 @@ public class FleetManagerMenu {
                         System.out.println("Error creating cabin classes: " + ex.getMessage());
                     }
                 } else if (response == 2) {
+                    List<AircraftConfiguration> aircraftConfigurations = aircraftConfigurationSessionBeanRemote.viewAllAircraftConfigurations();
+                    for (int i = 0; i < aircraftConfigurations.size(); i++) {
+                        System.out.println((i + 1) + ": Aircraft type: " + aircraftConfigurations.get(i).getAircraftType().getAircraftTypeName()
+                                + "; Configuration name: " + aircraftConfigurations.get(i).getName());
+                    }
+                } else if (response == 3) {
+                    sc.nextLine();
+                    System.out.print("Enter aircraft configuration name> ");
+                    String name = sc.nextLine();
+                    AircraftConfiguration aircraftConfiguration = aircraftConfigurationSessionBeanRemote.viewAircraftConfigurationDetails(name);
+                    System.out.println("Aircraft configuration ID: " + aircraftConfiguration.getAircraftConfigurationID()
+                            + "; Aircraft configuration name: " + aircraftConfiguration.getName() + "; Number of cabin classes: "
+                            + aircraftConfiguration.getNumCabinClasses() + "; Aircraft type: "
+                            + aircraftConfiguration.getAircraftType().getAircraftTypeName());
+                } else if (response == 4) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
-            if (response == 2) {
+            if (response == 4) {
                 break;
             }
         }

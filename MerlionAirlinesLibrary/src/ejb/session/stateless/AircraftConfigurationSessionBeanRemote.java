@@ -5,7 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.AircraftConfiguration;
 import entity.AircraftType;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -16,5 +18,9 @@ import javax.ejb.Remote;
 public interface AircraftConfigurationSessionBeanRemote {
 
     Long createAircraftConfiguration(AircraftType aircraftType, String name, Integer numCabinClasses);
-    
+
+    List<AircraftConfiguration> viewAllAircraftConfigurations();
+
+    AircraftConfiguration viewAircraftConfigurationDetails(String name);
+
 }

@@ -61,28 +61,29 @@ public class MainApp {
                 if (response == 1) {
                     try {
                         doLogin();
+                        System.out.println("Login successfully!\n");
+                        if (employee.getEmployeeType() == EmployeeType.FLEET_MANAGER) {
+                            FleetManagerMenu menu = new FleetManagerMenu(employee);
+                            menu.run(aircraftTypeSessionBeanRemote, aircraftConfigurationSessionBeanRemote,
+                                    cabinClassSessionBeanRemote);
+                        } else if (employee.getEmployeeType() == EmployeeType.ROUTE_PLANNER) {
+                            RoutePlannerMenu menu = new RoutePlannerMenu(employee);
+                            menu.run();
+                        } else if (employee.getEmployeeType() == EmployeeType.SCHEDULE_MANAGER) {
+                            ScheduleManagerMenu menu = new ScheduleManagerMenu(employee);
+                            menu.run();
+                        } else if (employee.getEmployeeType() == EmployeeType.SALES_MANAGER) {
+                            SalesManagerMenu menu = new SalesManagerMenu(employee);
+                            menu.run();
+                        } else if (employee.getEmployeeType() == EmployeeType.ADMINISTRATOR) {
+                            AdministratorMenu menu = new AdministratorMenu(employee);
+                            menu.run();
+                        }
                     } catch (InvalidLoginCredentialException ex) {
                         System.out.println("Invalid login credential: " + ex.getMessage() + "\n");
                     }
-                    System.out.println("Login successfully!\n");
-                    if (employee.getEmployeeType() == EmployeeType.FLEET_MANAGER) {
-                        FleetManagerMenu menu = new FleetManagerMenu(employee);
-                        menu.run(aircraftTypeSessionBeanRemote, aircraftConfigurationSessionBeanRemote,
-                                cabinClassSessionBeanRemote);
-                    } else if (employee.getEmployeeType() == EmployeeType.ROUTE_PLANNER) {
-                        RoutePlannerMenu menu = new RoutePlannerMenu(employee);
-                        menu.run();
-                    } else if (employee.getEmployeeType() == EmployeeType.SCHEDULE_MANAGER) {
-                        ScheduleManagerMenu menu = new ScheduleManagerMenu(employee);
-                        menu.run();
-                    } else if (employee.getEmployeeType() == EmployeeType.SALES_MANAGER) {
-                        SalesManagerMenu menu = new SalesManagerMenu(employee);
-                        menu.run();
-                    } else if (employee.getEmployeeType() == EmployeeType.ADMINISTRATOR) {
-                        AdministratorMenu menu = new AdministratorMenu(employee);
-                        menu.run();
-                    }
                 } else if (response == 2) {
+                    employee = null;
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
