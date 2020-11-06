@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,36 +32,49 @@ public class Flight implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long flightID;
-    
+
     @Column(unique = true, nullable = false)
     private String flightNumber;
-    
+
     @Column(nullable = false)
     private TripType tripType;
-    
+
     @Column(nullable = false)
     private boolean enabled;
-    
+
     @OneToOne
+
+    @JoinColumn(nullable = false)
+
     private AircraftConfiguration aircraftConfiguration;
-    
+
     @OneToMany(mappedBy = "flight")
     private List<FlightSchedulePlan> flightSchedulePlans = new ArrayList<FlightSchedulePlan>();
-    
-    @ManyToOne
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightRoute flightRoute;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    Flight complementaryFlight;
 
     public Flight() {
     }
 
-    public Flight(String flightNumber, TripType tripType, FlightRoute flightRoute) {
+    public Flight(String flightNumber, TripType tripType) {
         this.flightNumber = flightNumber;
         this.tripType = tripType;
-        this.flightRoute = flightRoute;
-        this.enabled = true;
+        enabled = true;
     }
-    
+
+    public Flight getComplementaryFlight() {
+        return complementaryFlight;
+    }
+
+    public void setComplementaryFlight(Flight complementaryFlight) {
+        this.complementaryFlight = complementaryFlight;
+    }
+
     public Long getFlightID() {
         return flightID;
     }
