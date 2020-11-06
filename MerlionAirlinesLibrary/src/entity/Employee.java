@@ -42,6 +42,7 @@ public class Employee implements Serializable {
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull
     private EmployeeType employeeType;
 
     public Employee() {

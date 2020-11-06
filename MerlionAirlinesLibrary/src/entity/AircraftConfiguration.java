@@ -49,10 +49,9 @@ public class AircraftConfiguration implements Serializable {
     public AircraftConfiguration() {
     }
 
-    public AircraftConfiguration(String name, Integer numCabinClasses, AircraftType aircraftType) {
+    public AircraftConfiguration(String name, Integer numCabinClasses) {
         this.name = name;
         this.numCabinClasses = numCabinClasses;
-        this.aircraftType = aircraftType;
     }
 
     public Long getAircraftConfigurationID() {

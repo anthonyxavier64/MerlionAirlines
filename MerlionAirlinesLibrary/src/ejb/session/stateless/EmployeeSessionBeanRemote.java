@@ -5,7 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.Employee;
 import enumeration.EmployeeType;
+import exception.EmployeeNotFoundException;
 import javax.ejb.Remote;
 
 /**
@@ -16,5 +18,7 @@ import javax.ejb.Remote;
 public interface EmployeeSessionBeanRemote {
 
     Long createEmployee(String name, String username, String password, EmployeeType userRole);
-    
+
+    Employee login(String username, String password) throws EmployeeNotFoundException;
+
 }

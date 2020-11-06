@@ -6,18 +6,15 @@
 package ejb.session.stateless;
 
 import entity.AircraftType;
-import java.util.List;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
  * @author Antho
  */
-@Remote
-public interface AircraftTypeSessionBeanRemote {
+@Local
+public interface AircraftConfigurationSessionBeanLocal {
 
-    Long createAircraftType(String aircraftTypeName, int maxPassengers);
-
-    List<AircraftType> getAllAircraftTypes();
-
+    Long createAircraftConfiguration(AircraftType aircraftType, String name, Integer numCabinClasses);
+    
 }

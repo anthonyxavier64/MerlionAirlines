@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -49,6 +51,7 @@ public class CabinClassConfiguration implements Serializable {
     @NotNull
     private String configPerColumn;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotNull
     private CabinType cabinType;
@@ -67,13 +70,26 @@ public class CabinClassConfiguration implements Serializable {
     public CabinClassConfiguration() {
     }
 
-    public CabinClassConfiguration(int numAisles, int numRows, int numSeatsAbreast, int[] configArray, CabinType cabinType) {
+    public CabinClassConfiguration(int numAisles, int numRows, int numSeatsAbreast,
+            String configPerColumn, CabinType cabinType, int startRowNum) {
         this.numAisles = numAisles;
         this.numRows = numRows;
         this.numSeatsAbreast = numSeatsAbreast;
+        this.configPerColumn = configPerColumn;
+        /*
         this.configPerColumn = "" + configArray[0];
         for (int i = 1; i < configArray.length; i++) {
             this.configPerColumn += "-" + configArray[i];
+        }
+         */
+        this.cabinType = cabinType;
+        String[] seatLetters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
+            "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+        for (int i = startRowNum; i <= numRows; i++) {
+            for (int r = 0; r < numSeatsAbreast; r++) {
+                String seatNumber = startRowNum + seatLetters[r];
+                seatNumbers.add(seatNumber);
+            }
         }
     }
 

@@ -53,6 +53,11 @@ public class Seat implements Serializable {
         this.available = true;
     }
 
+    public Seat(String seatNumber, boolean available) {
+        this.seatNumber = seatNumber;
+        this.available = available;
+    }
+
     public SeatInventory getSeatInventory() {
         return seatInventory;
     }

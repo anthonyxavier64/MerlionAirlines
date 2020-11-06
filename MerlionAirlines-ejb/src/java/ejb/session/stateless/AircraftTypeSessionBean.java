@@ -6,9 +6,11 @@
 package ejb.session.stateless;
 
 import entity.AircraftType;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,6 +30,13 @@ public class AircraftTypeSessionBean implements AircraftTypeSessionBeanRemote, A
         em.persist(newAircraftType);
         em.flush();
         return newAircraftType.getAircraftTypeID();
+    }
+
+    @Override
+    public List<AircraftType> getAllAircraftTypes() {
+        Query query = em.createQuery("SELECT a FROM AircraftType a");
+        List<AircraftType> aircraftTypes = query.getResultList();
+        return aircraftTypes;
     }
 
 }

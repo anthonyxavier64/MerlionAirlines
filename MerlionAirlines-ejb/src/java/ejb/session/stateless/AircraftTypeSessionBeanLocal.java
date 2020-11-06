@@ -5,6 +5,8 @@
  */
 package ejb.session.stateless;
 
+import entity.AircraftType;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -15,5 +17,7 @@ import javax.ejb.Local;
 public interface AircraftTypeSessionBeanLocal {
 
     Long createAircraftType(String aircraftTypeName, int maxPassengers);
-    
+
+    List<AircraftType> getAllAircraftTypes();
+
 }

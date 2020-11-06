@@ -27,17 +27,17 @@ public class AircraftType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aircraftTypeID;
-    
+
     @Column(unique = true, nullable = false)
     @NotNull
     private String aircraftTypeName;
-    
+
     @Column(nullable = false)
     @NotNull
     private Integer maxPassengers;
-    
+
     @OneToMany(mappedBy = "aircraftType")
-    private List<AircraftConfiguration> aircraftConfigurations = new ArrayList<AircraftConfiguration>(); 
+    private List<AircraftConfiguration> aircraftConfigurations = new ArrayList<AircraftConfiguration>();
 
     public AircraftType() {
     }
@@ -47,11 +47,6 @@ public class AircraftType implements Serializable {
         this.maxPassengers = maxPassengers;
     }
 
-    public AircraftType(String aircraftTypeName, Integer maxPassengers) {
-        this.aircraftTypeName = aircraftTypeName;
-        this.maxPassengers = maxPassengers;
-    }
-    
     public Long getAircraftTypeID() {
         return aircraftTypeID;
     }
@@ -93,7 +88,7 @@ public class AircraftType implements Serializable {
         this.aircraftTypeName = aircraftTypeName;
     }
 
-    public long getMaxPassengers() {
+    public int getMaxPassengers() {
         return maxPassengers;
     }
 
@@ -108,6 +103,5 @@ public class AircraftType implements Serializable {
     public void setAircraftConfigurations(List<AircraftConfiguration> aircraftConfigurations) {
         this.aircraftConfigurations = aircraftConfigurations;
     }
-    
-    
+
 }

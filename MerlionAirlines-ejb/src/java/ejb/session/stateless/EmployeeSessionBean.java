@@ -7,9 +7,12 @@ package ejb.session.stateless;
 
 import entity.Employee;
 import enumeration.EmployeeType;
+import exception.EmployeeNotFoundException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -29,6 +32,20 @@ public class EmployeeSessionBean implements EmployeeSessionBeanRemote, EmployeeS
         em.persist(newEmployee);
         em.flush();
         return newEmployee.getEmployeeID();
+    }
+
+    @Override
+    public Employee login(String username, String password) throws EmployeeNotFoundException {
+        Query query = em.createQuery("SELECT e FROM Employee e WHERE e.username = :username AND e.password = :password");
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        Employee employee;
+        try {
+            employee = (Employee) query.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new EmployeeNotFoundException("Employee not found!");
+        }
+        return employee;
     }
 
 }
