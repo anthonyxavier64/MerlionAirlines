@@ -6,6 +6,7 @@
     <class>entity.AircraftType</class>
     <class>entity.Airport</class>
     <class>entity.CabinClassConfiguration</class>
+    <class>entity.CreditCard</class>
     <class>entity.Customer</class>
     <class>entity.Employee</class>
     <class>entity.Fare</class>
@@ -15,6 +16,7 @@
     <class>entity.FlightSchedule</class>
     <class>entity.FlightSchedulePlan</class>
     <class>entity.Partner</class>
+    <class>entity.Passenger</class>
     <class>entity.Seat</class>
     <class>entity.SeatInventory</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
