@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -32,38 +33,44 @@ public class FlightSchedule implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightScheduleID;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(unique = true, nullable = false)
+    @NotNull
     private Date departureDate;
-    
+
     @Column(unique = true, nullable = false)
+    @NotNull
     private Integer departureTime; // in 24hrs format
-    
+
     @Column(unique = true, nullable = false)
+    @NotNull
     private Integer duration; // converted to minutes but in the UI will ask for hours and minutes
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(unique = true, nullable = false)
+    @NotNull
     private Date arrivalDate;
-    
+
     @Column(unique = true, nullable = false)
+    @NotNull
     private Integer arrivalTime;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(unique = true, nullable = false)
+    @NotNull
     private Date endDate;
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightSchedulePlan flightSchedulePlan;
-    
+
     @OneToMany(mappedBy = "flightSchedule")
     private List<FlightReservation> flightReservations = new ArrayList<FlightReservation>();
-    
+
     @OneToMany(mappedBy = "flightSchedule")
     private List<SeatInventory> seatInventories;
-    
+
     public FlightSchedule() {
     }
 
@@ -177,5 +184,13 @@ public class FlightSchedule implements Serializable {
 
     public void setFlightReservations(List<FlightReservation> flightReservations) {
         this.flightReservations = flightReservations;
+    }
+
+    public List<SeatInventory> getSeatInventories() {
+        return seatInventories;
+    }
+
+    public void setSeatInventories(List<SeatInventory> seatInventories) {
+        this.seatInventories = seatInventories;
     }
 }

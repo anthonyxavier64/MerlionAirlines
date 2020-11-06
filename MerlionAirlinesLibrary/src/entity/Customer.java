@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -30,34 +31,37 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerID;
-    
+
     @Column(nullable = false)
+    @NotNull
     private String firstName;
-    
+
     @Column(nullable = false)
+    @NotNull
     private String lastName;
-    
+
     @Column(nullable = false)
+    @NotNull
     private String email;
-    
+
     @Column(unique = true, nullable = false)
+    @NotNull
     private String username;
-    
+
     @Column(nullable = false)
+    @NotNull
     private String password;
-    
-    @OneToOne
-    private CreditCard creditCard;
-    
+
+    @OneToMany(mappedBy = "customer")
+    private List<CreditCard> creditCards = new ArrayList<CreditCard>();
+
     @OneToMany(mappedBy = "customer")
     private List<FlightReservation> flightReservations = new ArrayList<>();
-    
+
     public Customer() {
-        this.creditCard = null;
     }
 
     public Customer(String firstName, String lastName, String email, String username, String password) {
-        this.creditCard = null;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -137,7 +141,7 @@ public class Customer implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public List<FlightReservation> getFlightReservations() {
         return flightReservations;
     }
@@ -146,11 +150,12 @@ public class Customer implements Serializable {
         this.flightReservations = flightReservations;
     }
 
-    public CreditCard getCreditCard() {
-        return creditCard;
+    public List<CreditCard> getCreditCards() {
+        return creditCards;
     }
 
-    public void setCreditCard(CreditCard creditCard) {
-        this.creditCard = creditCard;
+    public void setCreditCards(List<CreditCard> creditCards) {
+        this.creditCards = creditCards;
     }
+
 }

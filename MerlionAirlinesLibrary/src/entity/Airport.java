@@ -6,15 +6,12 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -27,30 +24,36 @@ public class Airport implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long airportID;
-
+    
     @Column(unique = true, nullable = false)
+    @NotNull
     private String airportName;
-
+    
     @Column(unique = true, nullable = false)
-    private String airportCode;
-
+    @NotNull
+    private String IATACode;
+    
     @Column(nullable = false)
+    @NotNull
     private String country;
-
+    
+    @Column(nullable = false)
+    @NotNull
     private String city;
+    
+    @Column(nullable = false)
+    @NotNull
     private String state;
-    private String province;
 
     public Airport() {
     }
 
-    public Airport(String airportName, String airportCode, String country, String city, String state, String province) {
+    public Airport(String airportName, String airportCode, String country, String city, String state) {
         this.airportName = airportName;
-        this.airportCode = airportCode;
+        this.IATACode = airportCode;
         this.country = country;
         this.city = city;
         this.state = state;
-        this.province = province;
     }
 
     public Long getAirportID() {
@@ -94,12 +97,12 @@ public class Airport implements Serializable {
         this.airportName = airportName;
     }
 
-    public String getAirportCode() {
-        return airportCode;
+    public String getIATACode() {
+        return IATACode;
     }
 
-    public void setAirportCode(String airportCode) {
-        this.airportCode = airportCode;
+    public void setIATACode(String IATACode) {
+        this.IATACode = IATACode;
     }
 
     public String getCountry() {
@@ -124,14 +127,6 @@ public class Airport implements Serializable {
 
     public void setState(String state) {
         this.state = state;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
     }
 
 }

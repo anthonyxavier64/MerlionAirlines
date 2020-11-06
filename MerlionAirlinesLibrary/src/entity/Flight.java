@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -33,13 +34,16 @@ public class Flight implements Serializable {
     private Long flightID;
     
     @Column(unique = true, nullable = false)
+    @NotNull
     private String flightNumber;
     
     @Column(nullable = false)
-    private TripType tripType;
+    @NotNull
+    private TripType tripType; // may not be necessary
     
     @Column(nullable = false)
-    private boolean enabled;
+    @NotNull
+    private boolean enabled; // may not be necessary 
     
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
@@ -53,7 +57,7 @@ public class Flight implements Serializable {
     private FlightRoute flightRoute;
     
     @OneToOne(fetch = FetchType.LAZY)
-    Flight  complementaryFlight;
+    Flight complementaryFlight;
 
     public Flight() {
     }
@@ -71,7 +75,7 @@ public class Flight implements Serializable {
     public void setComplementaryFlight(Flight complementaryFlight) {
         this.complementaryFlight = complementaryFlight;
     }
-    
+
     public Long getFlightID() {
         return flightID;
     }

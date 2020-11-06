@@ -14,6 +14,6 @@ import javax.ejb.Remote;
 @Remote
 public interface AirportSessionBeanRemote {
 
-    Long createAirport(String airportName, String airportCode, String country, String city, String state, String province);
+    Long createAirport(String airportName, String airportCode, String country, String city, String state);
     
 }

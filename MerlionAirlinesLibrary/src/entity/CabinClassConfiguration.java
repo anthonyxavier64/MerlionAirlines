@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -31,32 +32,38 @@ public class CabinClassConfiguration implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cabinClassID;
-    
+
     @Column(nullable = false)
+    @NotNull
     private Integer numAisles;
-    
+
     @Column(nullable = false)
+    @NotNull
     private Integer numRows;
-    
+
     @Column(nullable = false)
+    @NotNull
     private Integer numSeatsAbreast;
-    
+
     @Column(nullable = false)
+    @NotNull
     private String configPerColumn;
-    
+
     @Column(nullable = false)
+    @NotNull
     private CabinType cabinType;
-    
+
     @Column(nullable = false)
+    @NotNull
     List<String> seatNumbers = new ArrayList<>();
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private AircraftConfiguration aircraftConfiguration;
-    
+
     @OneToMany(mappedBy = "cabinClassConfiguration")
     private List<Fare> fares = new ArrayList<>();
-   
+
     public CabinClassConfiguration() {
     }
 
@@ -65,7 +72,7 @@ public class CabinClassConfiguration implements Serializable {
         this.numRows = numRows;
         this.numSeatsAbreast = numSeatsAbreast;
         this.configPerColumn = "" + configArray[0];
-        for (int i = 1; i < configArray.length; i++) { 
+        for (int i = 1; i < configArray.length; i++) {
             this.configPerColumn += "-" + configArray[i];
         }
     }
@@ -93,8 +100,7 @@ public class CabinClassConfiguration implements Serializable {
     public void setFares(List<Fare> fares) {
         this.fares = fares;
     }
-    
-    
+
     public AircraftConfiguration getAircraftConfiguration() {
         return aircraftConfiguration;
     }
@@ -167,4 +173,4 @@ public class CabinClassConfiguration implements Serializable {
     public void setConfigPerColumn(String configPerColumn) {
         this.configPerColumn = configPerColumn;
     }
-    }
+}

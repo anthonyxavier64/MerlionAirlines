@@ -23,8 +23,8 @@ public class AirportSessionBean implements AirportSessionBeanRemote, AirportSess
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
-    public Long createAirport(String airportName, String airportCode, String country, String city, String state, String province) {
-        Airport newAirport = new Airport(airportName, airportCode, country, city, state, province);
+    public Long createAirport(String airportName, String airportCode, String country, String city, String state) {
+        Airport newAirport = new Airport(airportName, airportCode, country, city, state);
         em.persist(newAirport);
         em.flush();
         return newAirport.getAirportID();

@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -28,9 +29,11 @@ public class AircraftType implements Serializable {
     private Long aircraftTypeID;
     
     @Column(unique = true, nullable = false)
+    @NotNull
     private String aircraftTypeName;
     
     @Column(nullable = false)
+    @NotNull
     private Integer maxPassengers;
     
     @OneToMany(mappedBy = "aircraftType")

@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -23,14 +25,22 @@ public class Passenger implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long passengerID;
-    
+
     @Column(nullable = false)
+    @NotNull
     private String firstName;
+
     @Column(nullable = false)
+    @NotNull
     private String lastName;
+
     @Column(nullable = false)
+    @NotNull
     private String passportNumber;
-    
+
+    @OneToOne(mappedBy = "passenger")
+    private Seat seat;
+
     public Passenger() {
     }
 
@@ -96,5 +106,13 @@ public class Passenger implements Serializable {
     public String toString() {
         return "entity.Passenger[ id=" + passengerID + " ]";
     }
-    
+
+    public Seat getSeat() {
+        return seat;
+    }
+
+    public void setSeat(Seat seat) {
+        this.seat = seat;
+    }
+
 }

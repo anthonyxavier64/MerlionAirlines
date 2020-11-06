@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -30,30 +31,23 @@ public class FlightSchedulePlan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightSchedulePlanID;
-    
-    @Column(unique = true, nullable = false)
-    private String flightNumber;
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Flight flight;
-    
+
     @OneToMany(mappedBy = "flightSchedule")
-    private List<FlightSchedule>  flightSchedules = new ArrayList<FlightSchedule>();
-    
-    @OneToMany
+    private List<FlightSchedule> flightSchedules = new ArrayList<FlightSchedule>();
+
+    @OneToMany(mappedBy = "flightSchedulePlan")
     private List<Fare> fares = new ArrayList<>();
-    
+
     @OneToOne(fetch = FetchType.LAZY)
     private FlightSchedulePlan complementaryFlightSchedulePlan;
 
     public FlightSchedulePlan() {
     }
 
-    public FlightSchedulePlan(String flightNumber) {
-        this.flightNumber = flightNumber;
-    }
-    
     public Long getFlightSchedulePlanID() {
         return flightSchedulePlanID;
     }
@@ -87,14 +81,6 @@ public class FlightSchedulePlan implements Serializable {
         return "entity.FlightSchedulePlan[ id=" + flightSchedulePlanID + " ]";
     }
 
-    public String getFlightNumber() {
-        return flightNumber;
-    }
-
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
-    }
-
     public List<FlightSchedule> getFlightSchedules() {
         return flightSchedules;
     }
@@ -126,5 +112,5 @@ public class FlightSchedulePlan implements Serializable {
     public void setFares(List<Fare> fares) {
         this.fares = fares;
     }
-    
+
 }

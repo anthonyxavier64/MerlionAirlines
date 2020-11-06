@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -22,41 +23,33 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Seat implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seatID;
-   
+
     @Column(nullable = false)
-    private String rowNumber;
-    
-    @Column(nullable = false)
-    private String columnNumber;
-    
-    @Column(nullable = false)
+    @NotNull
     private String seatNumber;
-    
+
     @Column(nullable = false)
+    @NotNull
     private boolean available;
-    
+
+    private String fareBasisCode;
+
     @OneToOne
     private Passenger passenger;
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private SeatInventory seatInventory;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     private FlightReservation flightReservation;
-    
-    public Seat() {
-    }
 
-    public Seat(String rowNumber, String columnNumber) {
-        this.rowNumber = rowNumber;
-        this.columnNumber = columnNumber;
-        this.seatNumber = rowNumber + columnNumber;
+    public Seat() {
         this.available = true;
     }
 
@@ -67,7 +60,7 @@ public class Seat implements Serializable {
     public void setSeatInventory(SeatInventory seatInventory) {
         this.seatInventory = seatInventory;
     }
-    
+
     public Long getSeatID() {
         return seatID;
     }
@@ -101,22 +94,6 @@ public class Seat implements Serializable {
         return "entity.Seat[ id=" + seatID + " ]";
     }
 
-    public String getRowNumber() {
-        return rowNumber;
-    }
-
-    public void setRowNumber(String rowNumber) {
-        this.rowNumber = rowNumber;
-    }
-
-    public String getColumnNumber() {
-        return columnNumber;
-    }
-
-    public void setColumnNumber(String columnNumber) {
-        this.columnNumber = columnNumber;
-    }
-
     public String getSeatNumber() {
         return seatNumber;
     }
@@ -148,5 +125,13 @@ public class Seat implements Serializable {
     public void setFlightReservation(FlightReservation flightReservation) {
         this.flightReservation = flightReservation;
     }
-    
+
+    public String getFareBasisCode() {
+        return fareBasisCode;
+    }
+
+    public void setFareBasisCode(String fareBasisCode) {
+        this.fareBasisCode = fareBasisCode;
+    }
+
 }

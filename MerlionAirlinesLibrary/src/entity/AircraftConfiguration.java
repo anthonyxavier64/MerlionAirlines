@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,17 +30,19 @@ public class AircraftConfiguration implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aircraftConfigurationID;
-    
+
     @Column(unique = true, nullable = false)
+    @NotNull
     private String name;
-    
+
     @Column(nullable = false)
+    @NotNull
     private Integer numCabinClasses;
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private AircraftType aircraftType;
-    
+
     @OneToMany(mappedBy = "aircraftConfiguration")
     private List<CabinClassConfiguration> cabinClassConfigurations = new ArrayList<CabinClassConfiguration>();
 
@@ -51,8 +54,6 @@ public class AircraftConfiguration implements Serializable {
         this.numCabinClasses = numCabinClasses;
         this.aircraftType = aircraftType;
     }
-
-   
 
     public Long getAircraftConfigurationID() {
         return aircraftConfigurationID;

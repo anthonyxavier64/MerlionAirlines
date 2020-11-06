@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -31,21 +32,25 @@ public class SeatInventory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seatInventoryID;
-    
+
     @OneToMany(mappedBy = "seatInventory")
     private List<Seat> seats = new ArrayList<>();
-  
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightSchedule flightSchedule;
-    
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+
+    @Column(nullable = false)
+    @NotNull
     private CabinClassConfiguration cabinClassConfiguration;
 
     public SeatInventory() {
     }
-    
+
+    public SeatInventory(CabinClassConfiguration cabinClassConfiguration) {
+        this.cabinClassConfiguration = cabinClassConfiguration;
+    }
+
     public Long getSeatInventoryID() {
         return seatInventoryID;
     }
@@ -53,14 +58,14 @@ public class SeatInventory implements Serializable {
     public void setSeatInventoryID(Long seatInventoryID) {
         this.seatInventoryID = seatInventoryID;
     }
-    
+
     public void addSeat(Seat seat) throws SeatInventoryAddSeatException {
         if (seat != null && !this.getSeats().contains(seat)) {
             this.getSeats().add(seat);
         } else {
             throw new SeatInventoryAddSeatException("Seat already added to Seat Inventory");
         }
-        
+
     }
 
     @Override
@@ -110,5 +115,5 @@ public class SeatInventory implements Serializable {
 
     public void setCabinClassConfiguration(CabinClassConfiguration cabinClassConfiguration) {
         this.cabinClassConfiguration = cabinClassConfiguration;
-    }   
+    }
 }

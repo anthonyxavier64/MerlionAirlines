@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,31 +30,32 @@ public class FlightReservation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightReservationID;
-    
+
     @Column(nullable = false)
+    @NotNull
     BigDecimal totalAmount;
-    
+
     private String partnerName;
-    
+
     @OneToMany(mappedBy = "flightReservation")
     private List<Seat> seats;
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightSchedule flightSchedule;
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Customer customer; // Person who made the booking   
 
     public FlightReservation() {
     }
-    
+
     public FlightReservation(BigDecimal totalAmount, String partnerName) {
         this.totalAmount = totalAmount;
         this.partnerName = partnerName;
     }
-    
+
     public Long getFlightReservationID() {
         return flightReservationID;
     }
@@ -118,5 +120,5 @@ public class FlightReservation implements Serializable {
     public void setSeats(List<Seat> seats) {
         this.seats = seats;
     }
-    
+
 }

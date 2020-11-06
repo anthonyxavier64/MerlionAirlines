@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,20 +30,27 @@ public class Fare implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fareID;
-    
+
     @Column(unique = true, nullable = false)
+    @NotNull
     private CabinType cabinType;
-    
+
     @Column(unique = true, nullable = false)
+    @NotNull
     private String fareBasisCode;
-    
+
     @Column(nullable = false)
+    @NotNull
     private BigDecimal fareAmount;
-    
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private FlightSchedulePlan flightSchedulePlan;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private CabinClassConfiguration cabinClassConfiguration;
-    
+
     public Fare() {
     }
 
@@ -52,8 +60,6 @@ public class Fare implements Serializable {
         this.fareAmount = fareAmount;
     }
 
-    
-    
     public Long getFareID() {
         return fareID;
     }
@@ -117,5 +123,13 @@ public class Fare implements Serializable {
 
     public void setCabinClassConfiguration(CabinClassConfiguration cabinClassConfiguration) {
         this.cabinClassConfiguration = cabinClassConfiguration;
+    }
+
+    public FlightSchedulePlan getFlightSchedulePlan() {
+        return flightSchedulePlan;
+    }
+
+    public void setFlightSchedulePlan(FlightSchedulePlan flightSchedulePlan) {
+        this.flightSchedulePlan = flightSchedulePlan;
     }
 }

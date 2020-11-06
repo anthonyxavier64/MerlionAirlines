@@ -51,7 +51,7 @@ public class DataInitialisationSessionBean {
             employeeSessionBean.createEmployee("Schedule Manager", "schedulemanager", "password", EmployeeType.SCHEDULE_MANAGER);
             employeeSessionBean.createEmployee("Sales Manager", "salesmanager", "password", EmployeeType.SALES_MANAGER);
             partnerSessionBean.createPartner("Partner", "partner", "password");
-            airportSessionBean.createAirport("Singapore Changi Airport", "SIN", "Singapore", "Singapore", "Singapore", "Singapore");
+            airportSessionBean.createAirport("Singapore Changi Airport", "SIN", "Singapore", "Singapore", "Singapore");
             aircraftTypeSessionBean.createAircraftType("Boeing 747", 500);
         }
     }
