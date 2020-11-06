@@ -109,14 +109,6 @@ public class AircraftConfiguration implements Serializable {
         this.aircraftType = aircraftType;
     }
 
-    public List<CabinClassConfiguration> getCabinClassConfigurations() {
-        return cabinClassConfigurations;
-    }
-
-    public void setCabinClassConfigurations(List<CabinClassConfiguration> cabinClassConfigurations) {
-        this.cabinClassConfigurations = cabinClassConfigurations;
-    }
-
     public void setNumCabinClasses(Integer numCabinClasses) {
         this.numCabinClasses = numCabinClasses;
     }
