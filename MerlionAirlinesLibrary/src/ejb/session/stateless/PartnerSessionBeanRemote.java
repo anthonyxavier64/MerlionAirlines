@@ -5,14 +5,15 @@
  */
 package ejb.session.stateless;
 
-import enumeration.EmployeeType;
 import javax.ejb.Remote;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
 @Remote
-public interface CustomerSessionBeanRemote {
+public interface PartnerSessionBeanRemote {
 
+    Long createPartner(String name, String username, String password);
+    
 }

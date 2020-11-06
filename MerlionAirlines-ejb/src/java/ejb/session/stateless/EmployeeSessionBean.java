@@ -13,14 +13,22 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
 @Stateless
-public class CustomerSessionBean implements CustomerSessionBeanRemote, CustomerSessionBeanLocal {
+public class EmployeeSessionBean implements EmployeeSessionBeanRemote, EmployeeSessionBeanLocal {
 
     @PersistenceContext(unitName = "MerlionAirlines-ejbPU")
     private EntityManager em;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @Override
+    public Long createEmployee(String name, String username, String password, EmployeeType userRole) {
+        Employee newEmployee = new Employee(name, username, password, userRole);
+        em.persist(newEmployee);
+        em.flush();
+        return newEmployee.getEmployeeID();
+    }
+
 }

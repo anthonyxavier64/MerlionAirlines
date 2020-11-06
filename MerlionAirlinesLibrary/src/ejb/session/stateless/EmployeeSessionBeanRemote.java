@@ -10,9 +10,11 @@ import javax.ejb.Remote;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
 @Remote
-public interface CustomerSessionBeanRemote {
+public interface EmployeeSessionBeanRemote {
 
+    Long createEmployee(String name, String username, String password, EmployeeType userRole);
+    
 }

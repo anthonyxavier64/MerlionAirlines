@@ -5,14 +5,15 @@
  */
 package ejb.session.stateless;
 
-import enumeration.EmployeeType;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
-@Remote
-public interface CustomerSessionBeanRemote {
+@Local
+public interface AircraftTypeSessionBeanLocal {
 
+    Long createAircraftType(String aircraftTypeName, int maxPassengers);
+    
 }

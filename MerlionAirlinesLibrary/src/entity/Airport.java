@@ -41,9 +41,6 @@ public class Airport implements Serializable {
     private String city;
     private String state;
     private String province;
-    
-    @ManyToMany(mappedBy = "origin") // Store the flight routes that originate from that airport
-    private List<FlightRoute> flightRoutes = new ArrayList<>();
 
     public Airport() {
     }

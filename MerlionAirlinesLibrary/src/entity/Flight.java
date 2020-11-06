@@ -42,11 +42,9 @@ public class Flight implements Serializable {
     private boolean enabled;
     
     @OneToOne
-    @JoinColumn(nullable = false)
     private AircraftConfiguration aircraftConfiguration;
     
     @OneToMany(mappedBy = "flight")
-    @JoinColumn(nullable = false)
     private List<FlightSchedulePlan> flightSchedulePlans = new ArrayList<FlightSchedulePlan>();
     
     @ManyToOne

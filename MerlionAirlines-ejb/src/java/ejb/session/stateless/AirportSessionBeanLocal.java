@@ -5,14 +5,15 @@
  */
 package ejb.session.stateless;
 
-import enumeration.EmployeeType;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
-@Remote
-public interface CustomerSessionBeanRemote {
+@Local
+public interface AirportSessionBeanLocal {
 
+    Long createAirport(String airportName, String airportCode, String country, String city, String state, String province);
+    
 }

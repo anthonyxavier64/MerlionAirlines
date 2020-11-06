@@ -30,25 +30,24 @@ public class FlightSchedulePlan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long flightSchedulePlanID;
-    
+
     @Column(unique = true, nullable = false)
     private String flightNumber;
-    
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private Flight flight;
-    
-    @OneToMany(mappedBy = "flightSchedule")
-    @JoinColumn(nullable = false)
-    private List<FlightSchedule>  flightSchedules = new ArrayList<FlightSchedule>();
-    
+
+    @OneToMany(mappedBy = "flightSchedulePlan")
+    private List<FlightSchedule> flightSchedules = new ArrayList<FlightSchedule>();
+
     @OneToOne
     @JoinColumn(nullable = false)
     private Fare fare;
-    
+
     @OneToOne(mappedBy = "complementaryFlightSchedulePlan")
     private FlightSchedulePlan flightSchedulePlan;
-    
+
     @OneToOne
     private FlightSchedulePlan complementaryFlightSchedulePlan;
 
@@ -58,7 +57,7 @@ public class FlightSchedulePlan implements Serializable {
     public FlightSchedulePlan(String flightNumber) {
         this.flightNumber = flightNumber;
     }
-    
+
     public Long getFlightSchedulePlanID() {
         return flightSchedulePlanID;
     }

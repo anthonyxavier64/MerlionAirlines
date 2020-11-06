@@ -17,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -30,28 +32,22 @@ public class FlightRoute implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long flightRouteId;
-    
     @Column(unique = true, nullable = false)
     private boolean enabled;
-    
-    @ManyToOne
-    @JoinColumn(nullable = false)
+    @OneToOne(optional = false)
     private Airport origin;
-    
-    @ManyToOne
-    @JoinColumn(nullable = false)
+    @OneToOne(optional = false)
     private Airport destination;
-    
+
     @OneToMany(mappedBy = "flightRoute")
-    @JoinColumn(nullable = false)
     private List<Flight> flights = new ArrayList<>();
-    
+
     public FlightRoute(Airport origin, Airport destination) {
         this.enabled = true;
         this.origin = origin;
         this.destination = destination;
     }
-    
+
     public FlightRoute() {
     }
 
@@ -62,14 +58,14 @@ public class FlightRoute implements Serializable {
     public void setFlightRouteId(Long flightRouteId) {
         this.flightRouteId = flightRouteId;
     }
-    
+
     public void addFlight(Flight flight) throws FlightRouteAddFlightException {
         if (flight != null && !this.getFlights().contains(flight)) {
             this.getFlights().add(flight);
         } else {
             throw new FlightRouteAddFlightException("Flight already added to Flight Route");
         }
-        
+
     }
 
     @Override
@@ -104,5 +100,5 @@ public class FlightRoute implements Serializable {
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
     }
-    
+
 }

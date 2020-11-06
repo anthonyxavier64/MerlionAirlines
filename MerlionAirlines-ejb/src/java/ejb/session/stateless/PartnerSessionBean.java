@@ -5,22 +5,29 @@
  */
 package ejb.session.stateless;
 
-import entity.Employee;
-import enumeration.EmployeeType;
+import entity.Partner;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
 @Stateless
-public class CustomerSessionBean implements CustomerSessionBeanRemote, CustomerSessionBeanLocal {
+public class PartnerSessionBean implements PartnerSessionBeanRemote, PartnerSessionBeanLocal {
 
     @PersistenceContext(unitName = "MerlionAirlines-ejbPU")
     private EntityManager em;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @Override
+    public Long createPartner(String name, String username, String password) {
+        Partner newPartner = new Partner(name, username, password);
+        em.persist(newPartner);
+        em.flush();
+        return newPartner.getPartnerID();
+    }
+
 }

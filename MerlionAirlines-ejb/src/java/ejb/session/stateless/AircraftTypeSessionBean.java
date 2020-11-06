@@ -5,22 +5,29 @@
  */
 package ejb.session.stateless;
 
-import entity.Employee;
-import enumeration.EmployeeType;
+import entity.AircraftType;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
 @Stateless
-public class CustomerSessionBean implements CustomerSessionBeanRemote, CustomerSessionBeanLocal {
+public class AircraftTypeSessionBean implements AircraftTypeSessionBeanRemote, AircraftTypeSessionBeanLocal {
 
     @PersistenceContext(unitName = "MerlionAirlines-ejbPU")
     private EntityManager em;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @Override
+    public Long createAircraftType(String aircraftTypeName, int maxPassengers) {
+        AircraftType newAircraftType = new AircraftType(aircraftTypeName, maxPassengers);
+        em.persist(newAircraftType);
+        em.flush();
+        return newAircraftType.getAircraftTypeID();
+    }
+
 }

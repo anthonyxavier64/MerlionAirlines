@@ -29,17 +29,17 @@ public class AircraftConfiguration implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long aircraftConfigurationID;
-    
+
     @Column(unique = true, nullable = false)
     private String name;
-    
+
     @Column(nullable = false)
     private int numCabinClasses;
-    
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private AircraftType aircraftType;
-    
+
     @OneToMany(mappedBy = "aircraftConfiguration")
     @JoinColumn(nullable = false)
     private List<CabinClassConfiguration> cabinClassConfigurations = new ArrayList<CabinClassConfiguration>();

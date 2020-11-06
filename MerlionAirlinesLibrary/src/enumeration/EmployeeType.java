@@ -13,5 +13,6 @@ public enum EmployeeType {
     FLEET_MANAGER,
     ROUTE_PLANNER,
     SCHEDULE_MANAGER,
-    SALES_MANAGER
+    SALES_MANAGER,
+    ADMINISTRATOR
 }

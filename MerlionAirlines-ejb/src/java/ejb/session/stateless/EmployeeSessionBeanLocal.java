@@ -6,13 +6,15 @@
 package ejb.session.stateless;
 
 import enumeration.EmployeeType;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
- * @author yappeizhen
+ * @author Antho
  */
-@Remote
-public interface CustomerSessionBeanRemote {
+@Local
+public interface EmployeeSessionBeanLocal {
 
+    Long createEmployee(String name, String username, String password, EmployeeType userRole);
+    
 }
