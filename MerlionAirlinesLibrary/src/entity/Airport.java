@@ -26,24 +26,20 @@ public class Airport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
     private Long airportID;
-    
+
     @Column(unique = true, nullable = false)
     private String airportName;
-    
+
     @Column(unique = true, nullable = false)
     private String airportCode;
-    
+
     @Column(nullable = false)
     private String country;
-    
+
     private String city;
     private String state;
     private String province;
-    
-    @ManyToMany(mappedBy = "origin") // Store the flight routes that originate from that airport
-    private List<FlightRoute> flightRoutes = new ArrayList<>();
 
     public Airport() {
     }
@@ -138,14 +134,4 @@ public class Airport implements Serializable {
         this.province = province;
     }
 
-    public List<FlightRoute> getFlightRoutes() {
-        return flightRoutes;
-    }
-
-    public void setFlightRoutes(List<FlightRoute> flightRoutes) {
-        this.flightRoutes = flightRoutes;
-    }
-    
-    
-    
 }
