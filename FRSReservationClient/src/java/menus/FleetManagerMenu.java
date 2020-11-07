@@ -11,9 +11,13 @@ import entity.Employee;
 import java.util.List;
 import java.util.Scanner;
 import ejb.session.stateless.AircraftConfigurationSessionBeanRemote;
+import ejb.session.stateless.AirportSessionBeanRemote;
 import ejb.session.stateless.CabinClassSessionBeanRemote;
+import ejb.session.stateless.FlightRouteSessionBeanRemote;
 import entity.AircraftConfiguration;
+import entity.Airport;
 import enumeration.CabinType;
+import exception.FlightRouteAlreadyExistException;
 import exception.MaximumCapacityExceeded;
 import java.util.ArrayList;
 
@@ -46,7 +50,6 @@ public class FleetManagerMenu {
             System.out.println("1: Create new aircraft configuration");
             System.out.println("2: View all aircraft configurations");
             System.out.println("3: View aircraft configuration details");
-            //System.out.println("4: Issue replacement ATM card");
             System.out.println("4: Logout\n");
             response = 0;
 

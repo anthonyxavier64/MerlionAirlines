@@ -18,7 +18,9 @@ import menus.RoutePlannerMenu;
 import menus.SalesManagerMenu;
 import menus.ScheduleManagerMenu;
 import ejb.session.stateless.AircraftConfigurationSessionBeanRemote;
+import ejb.session.stateless.AirportSessionBeanRemote;
 import ejb.session.stateless.CabinClassSessionBeanRemote;
+import ejb.session.stateless.FlightRouteSessionBeanRemote;
 
 /**
  *
@@ -31,6 +33,8 @@ public class MainApp {
     private AircraftTypeSessionBeanRemote aircraftTypeSessionBeanRemote;
     private AircraftConfigurationSessionBeanRemote aircraftConfigurationSessionBeanRemote;
     private CabinClassSessionBeanRemote cabinClassSessionBeanRemote;
+    private FlightRouteSessionBeanRemote flightRouteSessionBeanRemote;
+    private AirportSessionBeanRemote airportSessionBeanRemote;
     private Scanner sc = new Scanner(System.in);
 
     public MainApp() {
@@ -38,11 +42,15 @@ public class MainApp {
 
     public MainApp(EmployeeSessionBeanRemote employeeSessionBeanRemote, AircraftTypeSessionBeanRemote aircraftTypeSessionBeanRemote,
             AircraftConfigurationSessionBeanRemote aircraftConfigurationSessionBeanRemote,
-            CabinClassSessionBeanRemote cabinClassSessionBeanRemote) {
+            CabinClassSessionBeanRemote cabinClassSessionBeanRemote,
+            FlightRouteSessionBeanRemote flightRouteSessionBeanRemote,
+            AirportSessionBeanRemote airportSessionBeanRemote) {
         this.employeeSessionBeanRemote = employeeSessionBeanRemote;
         this.aircraftTypeSessionBeanRemote = aircraftTypeSessionBeanRemote;
         this.aircraftConfigurationSessionBeanRemote = aircraftConfigurationSessionBeanRemote;
         this.cabinClassSessionBeanRemote = cabinClassSessionBeanRemote;
+        this.flightRouteSessionBeanRemote = flightRouteSessionBeanRemote;
+        this.airportSessionBeanRemote = airportSessionBeanRemote;
     }
 
     public void run() {
@@ -68,7 +76,7 @@ public class MainApp {
                                     cabinClassSessionBeanRemote);
                         } else if (employee.getEmployeeType() == EmployeeType.ROUTE_PLANNER) {
                             RoutePlannerMenu menu = new RoutePlannerMenu(employee);
-                            menu.run();
+                            menu.run(airportSessionBeanRemote, flightRouteSessionBeanRemote);
                         } else if (employee.getEmployeeType() == EmployeeType.SCHEDULE_MANAGER) {
                             ScheduleManagerMenu menu = new ScheduleManagerMenu(employee);
                             menu.run();
@@ -77,7 +85,7 @@ public class MainApp {
                             menu.run();
                         } else if (employee.getEmployeeType() == EmployeeType.ADMINISTRATOR) {
                             AdministratorMenu menu = new AdministratorMenu(employee);
-                            menu.run();
+                            menu.run(airportSessionBeanRemote);
                         }
                     } catch (InvalidLoginCredentialException ex) {
                         System.out.println("Invalid login credential: " + ex.getMessage() + "\n");

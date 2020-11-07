@@ -6,9 +6,11 @@
 package ejb.session.stateless;
 
 import entity.Airport;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,6 +30,13 @@ public class AirportSessionBean implements AirportSessionBeanRemote, AirportSess
         em.persist(newAirport);
         em.flush();
         return newAirport.getAirportID();
+    }
+
+    @Override
+    public List<Airport> viewAllAirports() {
+        Query query = em.createQuery("SELECT a FROM Airport a");
+        List<Airport> airports = query.getResultList();
+        return airports;
     }
 
 }

@@ -55,7 +55,7 @@ public class FlightRoute implements Serializable {
     }
 
     public FlightRoute(Airport origin, Airport destination) {
-        this.enabled = true;
+        this.enabled = false;
         this.origin = origin;
         this.destination = destination;
     }
