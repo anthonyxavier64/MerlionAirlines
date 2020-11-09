@@ -85,7 +85,7 @@ public class CabinClassConfiguration implements Serializable {
         this.cabinType = cabinType;
         String[] seatLetters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
             "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-        for (int i = startRowNum; i <= numRows; i++) {
+        for (int i = startRowNum; i <= numRows + startRowNum - 1; i++) {
             for (int r = 0; r < numSeatsAbreast; r++) {
                 String seatNumber = startRowNum + seatLetters[r];
                 seatNumbers.add(seatNumber);

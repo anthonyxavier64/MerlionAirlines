@@ -121,26 +121,11 @@ public class RoutePlannerMenu {
         sc.nextLine();
         String ans;
         Long flightRouteId = flightRoute.getFlightRouteId();
-        if (flightRoute.isEnabled()) {
-            if (flightRoute.getComplementaryFlightRoute() != null) {
-                System.out.print("Complementary flight route will also be deleted, continue? Y/N> ");
-                ans = sc.nextLine().toLowerCase();
-                if (ans.equals("y")) {
-                    flightRouteSessionBeanRemote.deleteFlightRoute(flightRouteId);
-                }
-            } else {
-                System.out.print("Original flight route for this complementary flight route will also be deleted, continue? Y/N> ");
-                ans = sc.nextLine().toLowerCase();
-                if (ans.equals("y")) {
-                    flightRouteSessionBeanRemote.deleteFlightRoute(flightRouteId);
-                }
-            }
-        } else {
-            System.out.print("Confirm deletion? Y/N> ");
-            ans = sc.nextLine().toLowerCase();
-            if (ans.equals("y")) {
-                flightRouteSessionBeanRemote.deleteFlightRoute(flightRouteId);
-            }
+
+        System.out.print("Confirm deletion? Y/N> ");
+        ans = sc.nextLine().toLowerCase();
+        if (ans.equals("y")) {
+            flightRouteSessionBeanRemote.deleteFlightRoute(flightRouteId);
         }
     }
 

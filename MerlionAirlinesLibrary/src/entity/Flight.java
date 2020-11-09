@@ -32,39 +32,39 @@ public class Flight implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightID;
-    
+
     @Column(unique = true, nullable = false)
     @NotNull
     private String flightNumber;
-    
+
     @Column(nullable = false)
     @NotNull
-    private TripType tripType; // may not be necessary
-    
+    private boolean twoWay;
+
     @Column(nullable = false)
     @NotNull
-    private boolean enabled; // may not be necessary 
-    
+    private boolean enabled; 
+
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private AircraftConfiguration aircraftConfiguration;
-    
+
     @OneToMany(mappedBy = "flight")
     private List<FlightSchedulePlan> flightSchedulePlans = new ArrayList<FlightSchedulePlan>();
-    
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightRoute flightRoute;
-    
+
     @OneToOne(fetch = FetchType.LAZY)
     Flight complementaryFlight;
 
     public Flight() {
     }
 
-    public Flight(String flightNumber, TripType tripType) {
-        this.flightNumber = flightNumber;
-        this.tripType = tripType;
+    public Flight(String flightNumber) {
+        this.flightNumber = "ML" + flightNumber;
+        this.twoWay = false;
         enabled = true;
     }
 
@@ -117,12 +117,12 @@ public class Flight implements Serializable {
         this.flightNumber = flightNumber;
     }
 
-    public TripType getTripType() {
-        return tripType;
+    public boolean isTwoWay() {
+        return twoWay;
     }
 
-    public void setTripType(TripType tripType) {
-        this.tripType = tripType;
+    public void setTwoWay(boolean twoWay) {
+        this.twoWay = twoWay;
     }
 
     public boolean isEnabled() {
