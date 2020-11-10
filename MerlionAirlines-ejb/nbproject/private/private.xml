@@ -3,18 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/CustomerSessionBean.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/AirportSessionBean.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/PartnerSessionBean.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/conf/persistence.xml</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/PartnerSessionBeanLocal.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/AirportSessionBeanLocal.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/CustomerSessionBeanLocal.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/EmployeeSessionBeanLocal.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/AircraftTypeSessionBean.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/AircraftTypeSessionBeanLocal.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/singleton/DataInitialisationSessionBean.java</file>
-            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/java/ejb/session/stateless/EmployeeSessionBean.java</file>
+            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlines-ejb/setup/glassfish-resources.xml</file>
+            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlines-ejb/src/conf/persistence.xml</file>
         </group>
     </open-files>
 </project-private>
