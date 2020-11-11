@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Airport;
+import exception.AirportDoesNotExistException;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -20,4 +21,5 @@ public interface AirportSessionBeanRemote {
 
     List<Airport> viewAllAirports();
 
+    public Airport retrieveAirportByAirportName(String name) throws AirportDoesNotExistException;
 }

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Airport;
+import exception.AirportDoesNotExistException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -19,5 +20,7 @@ public interface AirportSessionBeanLocal {
     Long createAirport(String airportName, String airportCode, String country, String city, String state);
 
     List<Airport> viewAllAirports();
+
+    public Airport retrieveAirportByAirportName(String name) throws AirportDoesNotExistException;
     
 }

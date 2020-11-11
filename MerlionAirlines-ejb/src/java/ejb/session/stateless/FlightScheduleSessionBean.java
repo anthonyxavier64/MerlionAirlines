@@ -5,12 +5,20 @@
  */
 package ejb.session.stateless;
 
+import entity.Airport;
+import entity.Flight;
 import entity.FlightSchedule;
 import entity.FlightSchedulePlan;
-import exception.FlightScheduleAlreadyExistException;
+import entity.SeatInventory;
+import enumeration.CabinType;
+import enumeration.FlightType;
+import enumeration.TripType;
 import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -71,4 +79,23 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
         fsp.getFlightSchedules().add(flightSchedule);
         em.flush();
     } 
+    
+    public List<FlightSchedule> searchOneWayDirectFlightOnDay(TripType tripType, Airport departureAirport, Airport destinationAirport, LocalDate departureDate, int numPassengers, FlightType flightTypePreference, CabinType cabinTypePreference) {
+        boolean twoWay = true;    
+        if (tripType == TripType.ONEWAY) {
+            twoWay = false;
+        }
+        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.twoWay = ?1 AND fs.flightSchedulePlan.flight.flightRoute.origin = ?2 AND fs.flightSchedulePlan.flight.flightRoute.destination = ?3");
+        List<FlightSchedule> filter1 = query.getResultList();
+        List<FlightSchedule> result = new ArrayList<>();
+        
+        for (FlightSchedule fs : filter1) {
+            if (departureDate.equals(fs.getDepartureDateTime().toLocalDate())) {
+                int numAvailSeats = 0;
+                for(SeatInventory seatInv : fs.getSeatInventories()) {
+                }
+            }
+        }
+        return null;
+    }
 }
