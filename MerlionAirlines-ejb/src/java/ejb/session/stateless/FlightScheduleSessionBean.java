@@ -96,5 +96,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
                 }
             }
         }
+        return null;
     }
 }

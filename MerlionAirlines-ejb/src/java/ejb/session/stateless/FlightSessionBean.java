@@ -8,13 +8,10 @@ package ejb.session.stateless;
 import entity.AircraftConfiguration;
 import entity.Flight;
 import entity.FlightRoute;
-<<<<<<< HEAD
 import enumeration.TripType;
-=======
 import entity.FlightSchedule;
 import entity.FlightSchedulePlan;
 import entity.SeatInventory;
->>>>>>> refs/remotes/origin/master
 import exception.FlightAlreadyExistException;
 import exception.FlightDoesNotExistException;
 import java.util.ArrayList;
