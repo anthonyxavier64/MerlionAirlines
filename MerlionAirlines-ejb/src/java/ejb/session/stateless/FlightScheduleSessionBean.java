@@ -11,7 +11,6 @@ import entity.FlightSchedule;
 import entity.FlightSchedulePlan;
 import entity.SeatInventory;
 import enumeration.CabinType;
-import enumeration.FlightType;
 import enumeration.TripType;
 import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
@@ -50,14 +49,15 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
             return flightSchedule;
         }
     }
+  
     
+    @Override
     public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays) {
         for (LocalDateTime date = startDateTime; date.isBefore(endDateTime); date = date.plusDays(intervalByDays)) {
             FlightSchedule newFlightSchedule = createNewFlightSchedule(new FlightSchedule(date, duration));
             try {
                 addFlightScheduleToFlightSchedulePlan(flightSchedulePlanId, newFlightSchedule.getFlightScheduleID());
             } catch (FlightSchedulesOverlapException ex) {
-                continue;
             }
         }
     }

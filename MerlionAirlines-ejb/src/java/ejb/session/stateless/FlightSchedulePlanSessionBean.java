@@ -75,6 +75,14 @@ public class FlightSchedulePlanSessionBean implements FlightSchedulePlanSessionB
         return newFsp.getFlightSchedulePlanID();
     }
     
+      
+    @Override
+    public FlightSchedulePlan retrieveFSPById(Long id) {
+        FlightSchedulePlan fsp = em.find(FlightSchedulePlan.class, id);
+        em.persist(fsp);
+        em.flush();
+        return fsp;
+    }
 
     @Override
     public void addFlightScheduleToFlightSchedulePlan(Long flightSchedulePlanId, Long flightScheduleId) throws FlightSchedulesOverlapException {

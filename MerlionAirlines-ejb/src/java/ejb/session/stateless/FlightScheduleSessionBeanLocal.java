@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.FlightSchedule;
+import entity.FlightSchedulePlan;
 import exception.FlightScheduleAlreadyExistException;
 import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
@@ -21,6 +22,5 @@ public interface FlightScheduleSessionBeanLocal {
 
     public FlightSchedule createNewFlightSchedule(FlightSchedule flightSchedule);
 
-    public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays);
-    
+    public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays);    
 }

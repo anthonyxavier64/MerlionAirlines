@@ -10,6 +10,7 @@ import ejb.session.stateless.FlightRouteSessionBeanRemote;
 import ejb.session.stateless.FlightSchedulePlanSessionBeanRemote;
 import ejb.session.stateless.FlightScheduleSessionBeanRemote;
 import entity.Employee;
+import entity.Fare;
 import java.util.Scanner;
 import ejb.session.stateless.FlightSessionBeanRemote;
 import entity.AircraftConfiguration;
@@ -20,20 +21,14 @@ import entity.FlightSchedule;
 import entity.FlightSchedulePlan;
 import exception.FlightAlreadyExistException;
 import exception.FlightDoesNotExistException;
-import exception.FlightScheduleAlreadyExistException;
 import exception.FlightSchedulesOverlapException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import ejb.session.stateless.FareSessionBeanRemote;
+import java.math.BigDecimal;
 
 /**
  *
@@ -55,7 +50,7 @@ public class ScheduleManagerMenu {
             FlightRouteSessionBeanRemote flightRouteSessionBeanRemote,
             AircraftConfigurationSessionBeanRemote aircraftConfigurationSessionBeanRemote,
             FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote,
-            FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote) {
+            FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote, FareSessionBeanRemote fareSessionBeanRemote) {
         int response = 0;
 
         while (true) {
@@ -75,7 +70,7 @@ public class ScheduleManagerMenu {
             while (response < 1 || response > 7) {
                 System.out.print("> ");
                 response = sc.nextInt();
-                
+
                 if (response == 1) {
                     try {
                         createFlight(flightSessionBeanRemote, flightRouteSessionBeanRemote,
@@ -83,10 +78,10 @@ public class ScheduleManagerMenu {
                     } catch (FlightAlreadyExistException ex) {
                         System.out.println("Error creating flight: " + ex.getMessage());
                     }
-                    
+
                 } else if (response == 2) {
                     viewAllFlights(flightSessionBeanRemote);
-                    
+
                 } else if (response == 3) {
                     try {
                         viewFlightDetails(flightSessionBeanRemote);
@@ -109,7 +104,7 @@ public class ScheduleManagerMenu {
 
                 } else if (response == 6) {
                     try {
-                        createFlightSchedulePlan(flightSchedulePlanSessionBeanRemote, flightSessionBeanRemote, flightScheduleSessionBeanRemote);
+                        createFlightSchedulePlan(flightSchedulePlanSessionBeanRemote, flightSessionBeanRemote, flightScheduleSessionBeanRemote, fareSessionBeanRemote);
                     } catch (FlightDoesNotExistException ex) {
                         System.out.println("Error creating flight schedule plan: " + ex.getMessage());
                     }
@@ -123,9 +118,7 @@ public class ScheduleManagerMenu {
         }
     }
 
-    private void createFlightSchedulePlan(FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote,
-            FlightSessionBeanRemote flightSessionBeanRemote,
-            FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote)
+    private void createFlightSchedulePlan(FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote, FlightSessionBeanRemote flightSessionBeanRemote, FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote, FareSessionBeanRemote fareSessionBeanRemote)
             throws FlightDoesNotExistException {
 
         System.out.println("*** Create flight schedule plan ***\n");
@@ -147,122 +140,139 @@ public class ScheduleManagerMenu {
 
         Duration duration;
         LocalDateTime departureDateTime;
+        Long fspId = null;
 
-        switch (ans) {
-            case 1:
-                createSingleFlightSchedule(flightScheduleSessionBeanRemote);
+        if (ans == 1) {
+            createSingleFlightSchedule(flightScheduleSessionBeanRemote);
+            departureDateTime = readDate();
+            duration = readDuration();
+            FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
+            try {
+                fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
+                flightSchedulePlanSessionBeanRemote.addFlightScheduleToFlightSchedulePlan(fspId, flightSchedule.getFlightScheduleID());
+            } catch (FlightSchedulesOverlapException ex) {
+                System.out.println("Unable to create flight schedule plan " + ex.getMessage());
+            }
+
+        } else if (ans == 2) {
+            char response = 'Y';
+            while (response == 'Y') {
                 departureDateTime = readDate();
                 duration = readDuration();
                 FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
                 try {
-                    Long fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
+                    fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
                     flightSchedulePlanSessionBeanRemote.addFlightScheduleToFlightSchedulePlan(fspId, flightSchedule.getFlightScheduleID());
                 } catch (FlightSchedulesOverlapException ex) {
                     System.out.println("Unable to create flight schedule plan " + ex.getMessage());
+                    continue;
                 }
-                break;
 
-            case 2:
-                char response = 'Y';
-                while (response == 'Y') {
-                    departureDateTime = readDate();
-                    duration = readDuration();
-                    flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
-                    try {
-                        Long fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
-                        flightSchedulePlanSessionBeanRemote.addFlightScheduleToFlightSchedulePlan(fspId, flightSchedule.getFlightScheduleID());
-                    } catch (FlightSchedulesOverlapException ex) {
-                        System.out.println("Unable to create flight schedule plan " + ex.getMessage());
-                        continue;
-                    }
-
-                    System.out.println("Flight schedule successfully added!");
-                    System.out.print("Add another flight schedule? (Y/N) >");
-                    response = sc.nextLine().charAt(0);
-                }
-                break;
-
-            case 3:
-                System.out.println("Enter number of days between recurrence>");
-                Integer n = sc.nextInt();
-                departureDateTime = readDate();
-                duration = readDuration();
-                LocalDateTime endDateTime;
-                while (true) {
-                    System.out.println("Enter end date and time (yyyy-MM-dd HH:mm)");
-                    String dateTimeString = sc.nextLine();
-                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-                    try {
-                        endDateTime = LocalDateTime.parse(dateTimeString, format);
-                        break;
-
-                    } catch (DateTimeParseException ex) {
-                        System.out.println("Incorrect date format! Try again with the format (yyyy-MM-dd HH:mm)");
-                    }
-                }
+                System.out.println("Flight schedule successfully added!");
+                System.out.print("Add another flight schedule? (Y/N) >");
+                response = sc.nextLine().charAt(0);
+            }
+        } else if (ans == 3) {
+            System.out.println("Enter number of days between recurrence>");
+            Integer n = sc.nextInt();
+            departureDateTime = readDate();
+            duration = readDuration();
+            LocalDateTime endDateTime;
+            while (true) {
+                System.out.println("Enter end date and time (dd/MM/yyyy HH:mm)");
+                String dateTimeString = sc.nextLine();
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
                 try {
-                    Long fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
-                    flightScheduleSessionBeanRemote.addRecurringFlightSchedules(fspId, departureDateTime, duration, endDateTime, n);
-                    System.out.println("Recurring flight schedule successfully created!");
+                    endDateTime = LocalDateTime.parse(dateTimeString, format);
+                    break;
 
-                } catch (FlightSchedulesOverlapException ex) {
-                    System.out.println("Unable to create flight schedule plan " + ex.getMessage());
+                } catch (DateTimeParseException ex) {
+                    System.out.println("Incorrect date format! Try again with the format (dd/MM/yyyy HH:mm)");
                 }
-                break;
+            }
 
-            case 4:
-                n = 7;
-                departureDateTime = readDate();
-                duration = readDuration();
-                while (true) {
-                    System.out.println("Enter end date and time (yyyy-MM-dd HH:mm)");
-                    String dateTimeString = sc.nextLine();
-                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
+            flightScheduleSessionBeanRemote.addRecurringFlightSchedules(fspId, departureDateTime, duration, endDateTime, n);
+            System.out.println("Recurring flight schedule successfully created!");
 
-                    try {
-                        endDateTime = LocalDateTime.parse(dateTimeString, format);
-                        break;
-
-                    } catch (DateTimeParseException ex) {
-                        System.out.println("Incorrect date format! Try again with the format (yyyy-MM-dd HH:mm)");
-                    }
-                }
+        } else if (ans == 4) {
+            int n = 7;
+            departureDateTime = readDate();
+            duration = readDuration();
+            LocalDateTime endDateTime;
+            while (true) {
+                System.out.println("Enter end date and time (dd/MM/yyyy HH:mm)");
+                String dateTimeString = sc.nextLine();
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
                 try {
-                    Long fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
-                    flightScheduleSessionBeanRemote.addRecurringFlightSchedules(fspId, departureDateTime, duration, endDateTime, n);
-                    System.out.println("Recurring weekly flight schedule successfully created!");
+                    endDateTime = LocalDateTime.parse(dateTimeString, format);
+                    break;
 
-                } catch (FlightSchedulesOverlapException ex) {
-                    System.out.println("Unable to create flight schedule plan " + ex.getMessage());
+                } catch (DateTimeParseException ex) {
+                    System.out.println("Incorrect date format! Try again with the format (dd/MM/yyyy HH:mm)");
                 }
-                break;
+            }
 
-            default:
-                System.out.println("Invalid flight schedule type!");
-                break;
+            fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
+            flightScheduleSessionBeanRemote.addRecurringFlightSchedules(fspId, departureDateTime, duration, endDateTime, n);
+            System.out.println("Recurring weekly flight schedule successfully created!");
+        } else {
+            System.out.println("Invalid flight schedule type!");
+            return;
         }
+        
+        enterFare(fspId, fareSessionBeanRemote, flightSchedulePlanSessionBeanRemote);
+        FlightSchedulePlan fsp = flightSchedulePlanSessionBeanRemote.retrieveFSPById(fspId);
+        createComplementaryFlightSchedulePlan(fsp, flightSchedulePlanSessionBeanRemote,
+            flightSessionBeanRemote,
+            flightScheduleSessionBeanRemote);
 
     }
 
-    private void createComplementaryFlightSchedulePlan(Flight flight, FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote,
+    private void enterFare(Long fspId, FareSessionBeanRemote fareSessionBeanRemote, FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote) {
+        FlightSchedulePlan fsp = flightSchedulePlanSessionBeanRemote.retrieveFSPById(fspId);
+        List<CabinClassConfiguration> cabinClasses = fsp.getFlight().getAircraftConfiguration().getCabinClassConfigurations();
+        for (CabinClassConfiguration cb : cabinClasses) {
+            System.out.print("Enter fare basis code> ");
+            String fareBasisCode = sc.nextLine().trim();
+            Fare fare = fareSessionBeanRemote.retrieveFareByFareBasisCode(fareBasisCode);
+            if (fare == null) {
+                System.out.print("Enter fare amount>");
+                BigDecimal fareAmount = sc.nextBigDecimal();
+                fare = new Fare(cb.getCabinType(), fareBasisCode, fareAmount);
+                fareSessionBeanRemote.addFareToFlightSchedulePlan(fspId, cb.getCabinClassID(), fare);
+            }
+        }
+    }
+
+    private void createComplementaryFlightSchedulePlan(FlightSchedulePlan fsp, FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote,
             FlightSessionBeanRemote flightSessionBeanRemote,
             FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote) {
 
-        if (flight.getComplementaryFlight() != null) {
+        if (fsp.getFlight().getComplementaryFlight() != null) {
             System.out.println("Selected flight schedule plan has a complementary return flight!");
             sc.nextLine();
             System.out.print("Create complementary return flight schedule plan? Y/N> ");
             String ans = sc.nextLine().toLowerCase();
             if (ans.equals("y")) {
-                Long fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight.getComplementaryFlight());
-                FlightRoute complementaryFlightRoute = selectedFlightRoute.getComplementaryFlightRoute();
-                Long complementartyFlightId = flightSessionBeanRemote.createComplementaryFlight(complementaryFlightNumber, complementaryFlightRoute.getFlightRouteId(),
-                        flight.getAircraftConfiguration().getAircraftConfigurationID(), flight.getFlightID());
+                System.out.print("Enter layover duration>");
+                Duration layover = readDuration();
+                Long complFspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), fsp.getFlight().getComplementaryFlight());
 
+                for (FlightSchedule fs : fsp.getFlightSchedules()) {
+                    FlightSchedule newFlightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(fs.getArrivalDateTime().plus(layover), fs.getDuration()));
+                    newFlightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(newFlightSchedule);
+                    try {
+                        flightSchedulePlanSessionBeanRemote.addFlightScheduleToFlightSchedulePlan(complFspId, newFlightSchedule.getFlightScheduleID());
+
+                    } catch (FlightSchedulesOverlapException ex) {
+                    }
+                }
             }
+        }
+    }
 
     private void deleteFlight(FlightSessionBeanRemote flightSessionBeanRemote) throws FlightDoesNotExistException {
         System.out.println("*** Delete flight ***\n");
@@ -312,25 +322,19 @@ public class ScheduleManagerMenu {
         while (response < 1 || response > 4) {
             System.out.print("> ");
             response = sc.nextInt();
-            switch (response) {
-                case 1:
+            if (response == 1) {
                     String newFlightNumber = updateFlightNumber(flightSessionBeanRemote, flightNumber);
                     flightNumber = newFlightNumber;
 
-                    break;
-
-                case 2:
+            } else if (response == 2) {
                     updateAircraftConfiguration(flightSessionBeanRemote, aircraftConfigurationSessionBeanRemote, flightNumber);
+                    
+            } else if (response == 3) {
+                updateFlightRoute(flightSessionBeanRemote, flightRouteSessionBeanRemote, flightNumber);
 
-                    break;
-
-                case 3:
-                    updateFlightRoute(flightSessionBeanRemote, flightRouteSessionBeanRemote, flightNumber);
-
-                case 4:
-                    break OUTER;
-
-                default:
+            } else if (response == 4) {                    
+                break;
+            } else {
                     System.out.println("Invalid option, please try again!\n");
                     break;
             }
