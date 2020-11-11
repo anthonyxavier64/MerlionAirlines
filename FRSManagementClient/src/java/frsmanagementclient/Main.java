@@ -5,17 +5,26 @@
  */
 package frsmanagementclient;
 
+import ejb.session.stateless.AirportSessionBeanRemote;
+import ejb.session.stateless.CustomerSessionBeanRemote;
+import javax.ejb.EJB;
+
 /**
  *
  * @author yappeizhen
  */
 public class Main {
 
+    @EJB
+    private static AirportSessionBeanRemote airportSessionBeanRemote;
+    @EJB
+    private static CustomerSessionBeanRemote customerSessionBeanRemote;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        MainApp mainApp = new MainApp(customerSessionBeanRemote, airportSessionBeanRemote);
+        mainApp.run();
     }
     
 }

@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.AircraftConfiguration;
 import entity.Flight;
 import entity.FlightRoute;
+import enumeration.TripType;
 import exception.FlightAlreadyExistException;
 import exception.FlightDoesNotExistException;
 import java.util.ArrayList;

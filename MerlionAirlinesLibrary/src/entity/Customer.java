@@ -43,6 +43,14 @@ public class Customer implements Serializable {
     @Column(nullable = false)
     @NotNull
     private String email;
+    
+    @Column(nullable = false)
+    @NotNull
+    private String mobilePhoneNumber;
+    
+    @Column(nullable = false)
+    @NotNull
+    private String address;
 
     @Column(unique = true, nullable = false)
     @NotNull
@@ -61,10 +69,12 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String email, String username, String password) {
+    public Customer(String firstName, String lastName, String email, String mobilePhoneNumber, String address, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        this.address = address;
         this.username = username;
         this.password = password;
     }
@@ -107,7 +117,7 @@ public class Customer implements Serializable {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.setFirstName(firstName);
     }
 
     public String getLastName() {
@@ -115,7 +125,7 @@ public class Customer implements Serializable {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.setLastName(lastName);
     }
 
     public String getEmail() {
@@ -123,7 +133,7 @@ public class Customer implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.setEmail(email);
     }
 
     public String getUsername() {
@@ -131,7 +141,7 @@ public class Customer implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.setUsername(username);
     }
 
     public String getPassword() {
@@ -139,7 +149,7 @@ public class Customer implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.setPassword(password);
     }
 
     public List<FlightReservation> getFlightReservations() {
@@ -156,6 +166,23 @@ public class Customer implements Serializable {
 
     public void setCreditCards(List<CreditCard> creditCards) {
         this.creditCards = creditCards;
+    }
+
+
+    public String getMobilePhoneNumber() {
+        return mobilePhoneNumber;
+    }
+
+    public void setMobilePhoneNumber(String mobilePhoneNumber) {
+        this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }

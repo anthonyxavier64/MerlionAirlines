@@ -243,8 +243,28 @@ public class ScheduleManagerMenu {
                 System.out.println("Invalid flight schedule type!");
                 break;
         }
+        
     }
 
+    private void createComplementaryFlightSchedulePlan(Flight flight, FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote,
+            FlightSessionBeanRemote flightSessionBeanRemote,
+            FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote) {
+        
+        if (selectedFlightRoute.getComplementaryFlightRoute() != null) {
+            System.out.println("Selected flight route has a complementary flight route!");
+            sc.nextLine();
+            System.out.print("Create complementary return flight? Y/N> ");
+            String ans = sc.nextLine().toLowerCase();
+            if (ans.equals("y")) {
+                System.out.print("Enter flight number> ");
+                String complementaryFlightNumber = sc.nextLine();
+                FlightRoute complementaryFlightRoute = selectedFlightRoute.getComplementaryFlightRoute();
+                Long complementartyFlightId = flightSessionBeanRemote.createComplementaryFlight(complementaryFlightNumber, complementaryFlightRoute.getFlightRouteId(),
+                        flight.getAircraftConfiguration().getAircraftConfigurationID(), flight.getFlightID());
+  
+        
+    }
+    
     private void deleteFlight(FlightSessionBeanRemote flightSessionBeanRemote) throws FlightDoesNotExistException {
         System.out.println("*** Delete flight ***\n");
         sc.nextLine();
@@ -461,16 +481,16 @@ public class ScheduleManagerMenu {
     private LocalDateTime readDate() {
         LocalDateTime departureDateTime;
         while (true) {
-            System.out.println("Enter departure date and time (yyyy-MM-dd HH:mm)");
+            System.out.println("Enter departure date and time (dd/MM/yyyy HH:mm)");
             String dateTimeString = sc.nextLine();
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
             try {
                 departureDateTime = LocalDateTime.parse(dateTimeString, format);
                 return departureDateTime;
 
             } catch (DateTimeParseException ex) {
-                System.out.println("Incorrect date format! Try again with the format (yyyy-MM-dd HH:mm)");
+                System.out.println("Incorrect date format! Try again with the format (dd/MM/yyyy HH:mm)");
             }
         }
     }

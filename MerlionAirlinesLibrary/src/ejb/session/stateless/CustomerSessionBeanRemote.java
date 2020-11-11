@@ -5,7 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.Customer;
 import enumeration.EmployeeType;
+import exception.CustomerAlreadyExistsException;
+import exception.CustomerNotFoundException;
 import javax.ejb.Remote;
 
 /**
@@ -14,5 +17,6 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface CustomerSessionBeanRemote {
-
+    public Customer login(String username, String password) throws CustomerNotFoundException;
+    public Long createNewCustomer(Customer newCust) throws CustomerAlreadyExistsException;
 }
