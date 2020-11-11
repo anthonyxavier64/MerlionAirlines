@@ -489,15 +489,9 @@ public class ScheduleManagerMenu {
     private LocalDateTime readDate() {
         LocalDateTime departureDateTime;
         while (true) {
-<<<<<<< HEAD:FRSManagementClient/src/java/menus/ScheduleManagerMenu.java
             System.out.println("Enter departure date and time (dd/MM/yyyy HH:mm)");
             String dateTimeString = sc.nextLine();
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-=======
-            System.out.print("Enter departure date and time (yyyy-MM-dd HH:mm)> ");
-            String dateTimeString = sc.nextLine().trim();
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
->>>>>>> refs/remotes/origin/master:FRSReservationClient/src/java/menus/ScheduleManagerMenu.java
 
             try {
                 departureDateTime = LocalDateTime.parse(dateTimeString, format);
