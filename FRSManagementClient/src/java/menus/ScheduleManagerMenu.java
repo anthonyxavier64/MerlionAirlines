@@ -157,7 +157,6 @@ public class ScheduleManagerMenu {
 
         switch (ans) {
             case 1:
-                createSingleFlightSchedule(flightScheduleSessionBeanRemote);
                 departureDateTime = readDate();
                 duration = readDuration();
                 FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
@@ -493,12 +492,4 @@ public class ScheduleManagerMenu {
         return duration;
     }
 
-    private void createSingleFlightSchedule(FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote) {
-        System.out.println("*** Create single flight schedule ***");
-        sc.nextLine();
-        LocalDateTime departureDateTime = readDate();
-        Duration duration = readDuration();
-        FlightSchedule flightSchedule = new FlightSchedule(departureDateTime, duration);
-        
-    }
 }
