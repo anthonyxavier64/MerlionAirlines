@@ -22,9 +22,11 @@ import javax.persistence.Query;
  */
 @Stateless
 public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, FlightRouteSessionBeanLocal {
-
+    
     @PersistenceContext(unitName = "MerlionAirlines-ejbPU")
     private EntityManager em;
+    
+    
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -43,11 +45,11 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
         }
         throw new FlightRouteAlreadyExistException("Flight route already exists!");
     }
-
+    
     @Override
     public Long createComplementaryFlightRoute(Airport origin, Airport destination, Long originalFlightRouteId) {
         FlightRoute originalFlightRoute = em.find(FlightRoute.class, originalFlightRouteId); // exception here if original flight route does not exist
-        originalFlightRoute.setEnabled(true);
+        originalFlightRoute.setTwoWay(true);
         FlightRoute complementaryFlightRoute;
         try {
             Long complementaryFlightRouteId = createFlightRoute(origin, destination);
@@ -59,45 +61,45 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
             complementaryFlightRoute = (FlightRoute) query.getSingleResult();
         }
         originalFlightRoute.setComplementaryFlightRoute(complementaryFlightRoute);
-        complementaryFlightRoute.setEnabled(true);
+        complementaryFlightRoute.setTwoWay(true);
         return complementaryFlightRoute.getFlightRouteId();
     }
-
+    
     @Override
     public List<FlightRoute> viewAllFlightRoutes() {
-        Query query = em.createQuery("SELECT f FROM FlightRoute f ORDER BY f.origin ASC");
+        Query query = em.createQuery("SELECT f FROM FlightRoute f ORDER BY f.origin ASC"); // Does not sort by alphabetical order
         List<FlightRoute> flightRoutes = query.getResultList();
         List<FlightRoute> flightRoutesFiltered = new ArrayList<>();
         for (FlightRoute f : flightRoutes) {
-            if (f.getComplementaryFlightRoute() != null && f.isEnabled()) {
+            if (!f.isEnabled()) {
+                continue;
+            }
+            if (f.getComplementaryFlightRoute() != null && f.isTwoWay()) {
                 flightRoutesFiltered.add(f);
                 flightRoutesFiltered.add(f.getComplementaryFlightRoute());
-            } else if (f.getComplementaryFlightRoute() == null && !f.isEnabled()) {
+            } else if (f.getComplementaryFlightRoute() == null && !f.isTwoWay()) {
                 flightRoutesFiltered.add(f);
             }
         }
         return flightRoutesFiltered;
     }
-
+    
     @Override
     public void deleteFlightRoute(Long flightRouteId) {
         FlightRoute flightRoute = em.find(FlightRoute.class, flightRouteId);
-        if (flightRoute.isEnabled()) {
+        if (flightRoute.isTwoWay()) {
             if (flightRoute.getComplementaryFlightRoute() == null) {
                 Query query = em.createQuery("SELECT f FROM FlightRoute f WHERE f.origin = :origin AND f.destination = :destination");
                 query.setParameter("origin", flightRoute.getDestination());
                 query.setParameter("destination", flightRoute.getOrigin());
-                FlightRoute originalFlighRoute = (FlightRoute) query.getSingleResult();
-                em.remove(flightRoute);
-                em.remove(originalFlighRoute);
+                FlightRoute originalFlightRoute = (FlightRoute) query.getSingleResult();
+                originalFlightRoute.setTwoWay(false);
+                originalFlightRoute.setComplementaryFlightRoute(null);
             } else {
-                FlightRoute complementaryFlightRoute = flightRoute.getComplementaryFlightRoute();
-                em.remove(complementaryFlightRoute);
-                em.remove(flightRoute);
+                flightRoute.getComplementaryFlightRoute().setTwoWay(false);
             }
-        } else {
-            em.remove(flightRoute);
         }
+        em.remove(flightRoute);
     }
-
+    
 }

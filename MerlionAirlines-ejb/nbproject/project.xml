@@ -6,7 +6,7 @@
             <name>MerlionAirlines-ejb</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <included-library dirs="200">libs.javaee-api-8.0.classpath</included-library>
-            <included-library dirs="200">reference.MerlionAirlineLibrary.jar</included-library>
+            <included-library dirs="200">reference.MerlionAirlinesLibrary.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
@@ -16,7 +16,7 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>MerlionAirlineLibrary</foreign-project>
+                <foreign-project>MerlionAirlinesLibrary</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

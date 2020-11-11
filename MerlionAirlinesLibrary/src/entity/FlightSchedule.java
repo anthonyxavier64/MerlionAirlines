@@ -6,6 +6,8 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,32 +36,18 @@ public class FlightSchedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightScheduleID;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(unique = true, nullable = false)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @JoinColumn(nullable = false)
     @NotNull
-    private Date departureDate;
+    private LocalDateTime departureDateTime;
 
-    @Column(unique = true, nullable = false)
     @NotNull
-    private Integer departureTime; // in 24hrs format
+    private Duration duration; // converted to minutes but in the UI will ask for hours and minutes
 
+    /*@Temporal(javax.persistence.TemporalType.DATE)
     @Column(unique = true, nullable = false)
     @NotNull
-    private Integer duration; // converted to minutes but in the UI will ask for hours and minutes
-
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(unique = true, nullable = false)
-    @NotNull
-    private Date arrivalDate;
-
-    @Column(unique = true, nullable = false)
-    @NotNull
-    private Integer arrivalTime;
-
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(unique = true, nullable = false)
-    @NotNull
-    private Date endDate;
+    private LocalDateTime endDate;*/
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
@@ -75,18 +63,9 @@ public class FlightSchedule implements Serializable {
     }
 
     // incomplete
-    public FlightSchedule(Date departureDate, int departureTime, int duration) {
-        this.departureDate = departureDate;
-        this.departureTime = departureTime;
+    public FlightSchedule(LocalDateTime departureDateTime, Duration duration) {
+        this.departureDateTime = departureDateTime;
         this.duration = duration;
-    }
-
-    // incomplete
-    // for recurrent schedule
-    public FlightSchedule(Date departureDate, int departureTime, Date endDate) {
-        this.departureDate = departureDate;
-        this.departureTime = departureTime;
-        this.endDate = endDate;
     }
 
     public Long getFlightScheduleID() {
@@ -122,44 +101,24 @@ public class FlightSchedule implements Serializable {
         return "entity.FlightSchedule[ id=" + flightScheduleID + " ]";
     }
 
-    public Date getDepartureDate() {
-        return departureDate;
+    public LocalDateTime getDepartureDateTime() {
+        return departureDateTime;
     }
 
-    public void setDepartureDate(Date departureDate) {
-        this.departureDate = departureDate;
+    public void setDepartureDateTime(LocalDateTime dateTime) {
+        this.departureDateTime = dateTime;
     }
 
-    public int getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(int departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    public int getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
-    public Date getArrivalDate() {
-        return arrivalDate;
-    }
-
-    public void setArrivalDate(Date arrivalDate) {
-        this.arrivalDate = arrivalDate;
-    }
-
-    public int getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(int arrivalTime) {
-        this.arrivalTime = arrivalTime;
+    public LocalDateTime getArrivalDateTime() {
+        return departureDateTime.plus(duration);
     }
 
     public FlightSchedulePlan getFlightSchedulePlan() {
@@ -168,14 +127,6 @@ public class FlightSchedule implements Serializable {
 
     public void setFlightSchedulePlan(FlightSchedulePlan flightSchedulePlan) {
         this.flightSchedulePlan = flightSchedulePlan;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public List<FlightReservation> getFlightReservations() {

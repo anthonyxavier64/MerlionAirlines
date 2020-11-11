@@ -766,12 +766,12 @@ exists or setup the property manually. For example like this:
                 COMPILATION SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
-        <ant antfile="${project.MerlionAirlineLibrary}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.MerlionAirlinesLibrary}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
-        <ant antfile="${project.MerlionAirlineLibrary}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.MerlionAirlinesLibrary}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
     </target>
@@ -787,20 +787,20 @@ exists or setup the property manually. For example like this:
     <target depends="compile,-library-inclusion-in-archive-weblogic,-library-inclusion-in-archive-by-user" name="library-inclusion-in-archive"/>
     <target if="is.jars.in.ejbjar" name="-library-inclusion-in-archive-by-user">
         <copyfiles files="${libs.javaee-api-8.0.classpath}" todir="${build.classes.dir}"/>
-        <copyfiles files="${reference.MerlionAirlineLibrary.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${reference.MerlionAirlinesLibrary.jar}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${libs.javaee-api-8.0.classpath}" property="manifest.libs.javaee-api-8.0.classpath"/>
-        <basename file="${reference.MerlionAirlineLibrary.jar}" property="manifest.reference.MerlionAirlineLibrary.jar"/>
+        <basename file="${reference.MerlionAirlinesLibrary.jar}" property="manifest.reference.MerlionAirlinesLibrary.jar"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
             <attribute name="Extension-List" value="jar-1 jar-2 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.libs.javaee-api-8.0.classpath}"/>
-            <attribute name="jar-2-Extension-Name" value="${manifest.reference.MerlionAirlineLibrary.jar}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.reference.MerlionAirlinesLibrary.jar}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
         <copyfiles files="${libs.javaee-api-8.0.classpath}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${reference.MerlionAirlineLibrary.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.MerlionAirlinesLibrary.jar}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">
@@ -1184,7 +1184,7 @@ exists or setup the property manually. For example like this:
                 CLEANUP SECTION
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.MerlionAirlineLibrary}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.MerlionAirlinesLibrary}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>

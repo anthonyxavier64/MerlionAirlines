@@ -32,22 +32,26 @@ public class FlightRoute implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightRouteId;
-    
+
     @Column(nullable = false)
     @NotNull
     private boolean enabled;
-    
+
+    @Column(nullable = false)
+    @NotNull
+    private boolean twoWay;
+
     @OneToOne(optional = false)
     @JoinColumn(nullable = false)
     private Airport origin;
-    
+
     @OneToOne(optional = false)
     @JoinColumn(nullable = false)
     private Airport destination;
-    
+
     @OneToMany(mappedBy = "flightRoute")
     private List<Flight> flights = new ArrayList<>();
-    
+
     @OneToOne(fetch = FetchType.LAZY)
     private FlightRoute complementaryFlightRoute;
 
@@ -55,7 +59,8 @@ public class FlightRoute implements Serializable {
     }
 
     public FlightRoute(Airport origin, Airport destination) {
-        this.enabled = false;
+        this.enabled = true;
+        this.twoWay = false;
         this.origin = origin;
         this.destination = destination;
     }
@@ -140,6 +145,14 @@ public class FlightRoute implements Serializable {
 
     public void setDestination(Airport destination) {
         this.destination = destination;
+    }
+
+    public boolean isTwoWay() {
+        return twoWay;
+    }
+
+    public void setTwoWay(boolean twoWay) {
+        this.twoWay = twoWay;
     }
 
 }

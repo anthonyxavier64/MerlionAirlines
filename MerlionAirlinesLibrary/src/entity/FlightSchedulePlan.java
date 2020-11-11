@@ -47,7 +47,7 @@ public class FlightSchedulePlan implements Serializable {
 
     public FlightSchedulePlan() {
     }
-
+    
     public Long getFlightSchedulePlanID() {
         return flightSchedulePlanID;
     }
