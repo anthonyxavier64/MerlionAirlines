@@ -44,7 +44,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
         try {
             flightSchedule = (FlightSchedule) query.getSingleResult();
             return flightSchedule;
-            
         } catch (NoResultException ex) {
             em.persist(flightSchedule);
             em.flush();

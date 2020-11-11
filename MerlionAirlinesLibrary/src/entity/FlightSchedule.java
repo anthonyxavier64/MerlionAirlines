@@ -36,7 +36,6 @@ public class FlightSchedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightScheduleID;
 
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @JoinColumn(nullable = false)
     @NotNull
     private LocalDateTime departureDateTime;
@@ -48,7 +47,6 @@ public class FlightSchedule implements Serializable {
     @Column(unique = true, nullable = false)
     @NotNull
     private LocalDateTime endDate;*/
-
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FlightSchedulePlan flightSchedulePlan;

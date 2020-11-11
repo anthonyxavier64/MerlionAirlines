@@ -32,6 +32,9 @@ public class SeatInventory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seatInventoryID;
+    private int availableSeats;
+    private int reservedSeats;
+    private int balanceSeats;
 
     @OneToMany(mappedBy = "seatInventory")
     private List<Seat> seats = new ArrayList<>();
@@ -115,5 +118,29 @@ public class SeatInventory implements Serializable {
 
     public void setCabinClassConfiguration(CabinClassConfiguration cabinClassConfiguration) {
         this.cabinClassConfiguration = cabinClassConfiguration;
+    }
+
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public int getReservedSeats() {
+        return reservedSeats;
+    }
+
+    public void setReservedSeats(int reservedSeats) {
+        this.reservedSeats = reservedSeats;
+    }
+
+    public int getBalanceSeats() {
+        return balanceSeats;
+    }
+
+    public void setBalanceSeats(int balanceSeats) {
+        this.balanceSeats = balanceSeats;
     }
 }
