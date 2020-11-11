@@ -8,11 +8,13 @@ package ejb.session.stateless;
 import entity.AircraftConfiguration;
 import entity.Flight;
 import entity.FlightRoute;
+import entity.FlightSchedule;
+import entity.FlightSchedulePlan;
+import entity.SeatInventory;
 import exception.FlightAlreadyExistException;
 import exception.FlightDoesNotExistException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -25,9 +27,6 @@ import javax.persistence.Query;
  */
 @Stateless
 public class FlightSessionBean implements FlightSessionBeanRemote, FlightSessionBeanLocal {
-
-    @EJB
-    private FlightRouteSessionBeanLocal flightRouteSessionBean;
 
     @PersistenceContext(unitName = "MerlionAirlines-ejbPU")
     private EntityManager em;
@@ -58,9 +57,18 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
     public Flight retrieveFlightByFlightNumber(String flightNumber) throws FlightDoesNotExistException {
         Query query = em.createQuery("SELECT f FROM Flight f WHERE f.flightNumber = :flightNumber");
         query.setParameter("flightNumber", "ML" + flightNumber);
-
         try {
             Flight flight = (Flight) query.getSingleResult();
+            List<FlightSchedulePlan> flightSchedulePlans = flight.getFlightSchedulePlans();
+            for (FlightSchedulePlan f : flightSchedulePlans) {
+                List<FlightSchedule> flightSchedules = f.getFlightSchedules();
+                for (FlightSchedule fs : flightSchedules) {
+                    List<SeatInventory> seatInventries = fs.getSeatInventories();
+                    for (SeatInventory sit : seatInventries) {
+                        sit.getSeats().size();
+                    }
+                }
+            }
             return flight;
         } catch (NoResultException ex) {
             throw new FlightDoesNotExistException("Flight number does not exists!");

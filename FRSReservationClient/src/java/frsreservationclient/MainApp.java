@@ -24,6 +24,7 @@ import ejb.session.stateless.FlightRouteSessionBeanRemote;
 import ejb.session.stateless.FlightSchedulePlanSessionBeanRemote;
 import ejb.session.stateless.FlightScheduleSessionBeanRemote;
 import ejb.session.stateless.FlightSessionBeanRemote;
+import ejb.session.stateless.SeatInventorySessionBeanRemote;
 
 /**
  *
@@ -39,8 +40,9 @@ public class MainApp {
     private FlightRouteSessionBeanRemote flightRouteSessionBeanRemote;
     private AirportSessionBeanRemote airportSessionBeanRemote;
     private FlightSessionBeanRemote flightSessionBeanRemote;
-    FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote;
-    FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote;
+    private FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote;
+    private FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote;
+    private SeatInventorySessionBeanRemote seatInventorySessionBeanRemote;
 
     private Scanner sc = new Scanner(System.in);
 
@@ -54,7 +56,8 @@ public class MainApp {
             AirportSessionBeanRemote airportSessionBeanRemote,
             FlightSessionBeanRemote flightSessionBeanRemote,
             FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote,
-            FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote) {
+            FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote,
+            SeatInventorySessionBeanRemote seatInventorySessionBeanRemote) {
         this.employeeSessionBeanRemote = employeeSessionBeanRemote;
         this.aircraftTypeSessionBeanRemote = aircraftTypeSessionBeanRemote;
         this.aircraftConfigurationSessionBeanRemote = aircraftConfigurationSessionBeanRemote;
@@ -64,6 +67,7 @@ public class MainApp {
         this.flightSessionBeanRemote = flightSessionBeanRemote;
         this.flightScheduleSessionBeanRemote = flightScheduleSessionBeanRemote;
         this.flightSchedulePlanSessionBeanRemote = flightSchedulePlanSessionBeanRemote;
+        this.seatInventorySessionBeanRemote = seatInventorySessionBeanRemote;
     }
 
     public void run() {
@@ -98,7 +102,7 @@ public class MainApp {
                                     flightSchedulePlanSessionBeanRemote);
                         } else if (employee.getEmployeeType() == EmployeeType.SALES_MANAGER) {
                             SalesManagerMenu menu = new SalesManagerMenu(employee);
-                            menu.run();
+                            menu.run(flightSessionBeanRemote, seatInventorySessionBeanRemote);
                         } else if (employee.getEmployeeType() == EmployeeType.ADMINISTRATOR) {
                             AdministratorMenu menu = new AdministratorMenu(employee);
                             menu.run(airportSessionBeanRemote);

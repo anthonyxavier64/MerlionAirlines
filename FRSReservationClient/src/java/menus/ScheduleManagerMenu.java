@@ -142,14 +142,22 @@ public class ScheduleManagerMenu {
 
         Flight flight = flightSessionBeanRemote.retrieveFlightByFlightNumber(flightNumber);
 
-        System.out.print("Enter flight schedule type to be created\n(single / multiple / recurrent weekly / recurrent by days)>");
-        String ans = sc.nextLine().trim().toLowerCase();
+        System.out.println("*** Create flight schedule(s) ***");
+        sc.nextLine();
+        System.out.println("Enter flight schedule type to be created\n(single / multiple / recurrent weekly / recurrent by days)>");
+        System.out.println("1: Single");
+        System.out.println("2: Multiple");
+        System.out.println("3: Recurrent every nth day");
+        System.out.println("4: Recurrent weekly");
+
+        int ans = sc.nextInt();
 
         Duration duration;
         LocalDateTime departureDateTime;
 
         switch (ans) {
-            case "single":
+            case 1:
+                createSingleFlightSchedule(flightScheduleSessionBeanRemote);
                 departureDateTime = readDate();
                 duration = readDuration();
                 FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
@@ -161,7 +169,7 @@ public class ScheduleManagerMenu {
                 }
                 break;
 
-            case "multiple":
+            case 2:
                 char response = 'Y';
                 while (response == 'Y') {
                     departureDateTime = readDate();
@@ -181,7 +189,7 @@ public class ScheduleManagerMenu {
                 }
                 break;
 
-            case "recurrent by days":
+            case 3:
                 System.out.println("Enter number of days between recurrence>");
                 Integer n = sc.nextInt();
                 departureDateTime = readDate();
@@ -211,7 +219,7 @@ public class ScheduleManagerMenu {
                 }
                 break;
 
-            case "recurrent weekly":
+            case 4:
                 n = 7;
                 departureDateTime = readDate();
                 duration = readDuration();
@@ -461,8 +469,8 @@ public class ScheduleManagerMenu {
     private LocalDateTime readDate() {
         LocalDateTime departureDateTime;
         while (true) {
-            System.out.println("Enter departure date and time (yyyy-MM-dd HH:mm)");
-            String dateTimeString = sc.nextLine();
+            System.out.print("Enter departure date and time (yyyy-MM-dd HH:mm)> ");
+            String dateTimeString = sc.nextLine().trim();
             DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
             try {
@@ -476,12 +484,21 @@ public class ScheduleManagerMenu {
     }
 
     private Duration readDuration() {
-        System.out.println("Enter Duration (hours:minutes");
+        System.out.print("Enter Duration (hours:minutes)> ");
         String s = sc.nextLine().trim();
         String[] values = s.split(":");
         // get the hours, minutes and seconds value and add it to the duration
         Duration duration = Duration.ofHours(Long.parseLong(values[0]));
         duration.plusMinutes(Long.parseLong(values[1]));
         return duration;
+    }
+
+    private void createSingleFlightSchedule(FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote) {
+        System.out.println("*** Create single flight schedule ***");
+        sc.nextLine();
+        LocalDateTime departureDateTime = readDate();
+        Duration duration = readDuration();
+        FlightSchedule flightSchedule = new FlightSchedule(departureDateTime, duration);
+        
     }
 }
