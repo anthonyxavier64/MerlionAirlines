@@ -17,6 +17,7 @@ import entity.FlightSchedulePlan;
 import entity.Seat;
 import entity.SeatInventory;
 import exception.FlightDoesNotExistException;
+import exception.NoFlightScheduleFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -59,13 +60,13 @@ public class SalesManagerMenu {
                 if (response == 1) {
                     try {
                         viewSeatsInventory(flightSessionBeanRemote);
-                    } catch (FlightDoesNotExistException ex) {
+                    } catch (FlightDoesNotExistException | NoFlightScheduleFoundException ex) {
                         System.out.println("Error viewing seats inventory: " + ex.getMessage());
                     }
                 } else if (response == 2) {
                     try {
                         viewFlightReservation(flightSessionBeanRemote, seatInventorySessionBeanRemote);
-                    } catch (FlightDoesNotExistException ex) {
+                    } catch (FlightDoesNotExistException | NoFlightScheduleFoundException ex) {
                         System.out.println("Error viewing flight reservations: " + ex.getMessage());
                     }
                 } else if (response == 3) {
@@ -80,7 +81,7 @@ public class SalesManagerMenu {
         }
     }
 
-    private void viewSeatsInventory(FlightSessionBeanRemote flightSessionBeanRemote) throws FlightDoesNotExistException {
+    private void viewSeatsInventory(FlightSessionBeanRemote flightSessionBeanRemote) throws FlightDoesNotExistException, NoFlightScheduleFoundException {
         System.out.println("*** View seats inventory ***");
         sc.nextLine();
         System.out.print("Enter flight number> ");
@@ -92,7 +93,12 @@ public class SalesManagerMenu {
             throw ex;
         }
         List<FlightSchedulePlan> flightSchedulePlans = flight.getFlightSchedulePlans();
-        FlightSchedule flightSchedule = selectFlightSchedule(flightSchedulePlans);
+        FlightSchedule flightSchedule;
+        try {
+            flightSchedule = selectFlightSchedule(flightSchedulePlans);
+        } catch (NoFlightScheduleFoundException ex) {
+            throw ex;
+        }
         List<SeatInventory> seatInventories = flightSchedule.getSeatInventories();
         int totalAvailSeats = 0;
         int totalReservedSeats = 0;
@@ -113,7 +119,7 @@ public class SalesManagerMenu {
     }
 
     private void viewFlightReservation(FlightSessionBeanRemote flightSessionBeanRemote,
-            SeatInventorySessionBeanRemote seatInventorySessionBeanRemote) throws FlightDoesNotExistException {
+            SeatInventorySessionBeanRemote seatInventorySessionBeanRemote) throws FlightDoesNotExistException, NoFlightScheduleFoundException {
         System.out.println("*** View seats inventory ***");
         sc.nextLine();
         System.out.print("Enter flight number> ");
@@ -125,7 +131,12 @@ public class SalesManagerMenu {
             throw ex;
         }
         List<FlightSchedulePlan> flightSchedulePlans = flight.getFlightSchedulePlans();
-        FlightSchedule flightSchedule = selectFlightSchedule(flightSchedulePlans);
+        FlightSchedule flightSchedule;
+        try {
+            flightSchedule = selectFlightSchedule(flightSchedulePlans);
+        } catch (NoFlightScheduleFoundException ex) {
+            throw ex;
+        }
         List<SeatInventory> seatInventories = flightSchedule.getSeatInventories();
         System.out.println("*** Reserved Seats ***");
         for (SeatInventory s : seatInventories) {
@@ -133,7 +144,10 @@ public class SalesManagerMenu {
         }
     }
 
-    private FlightSchedule selectFlightSchedule(List<FlightSchedulePlan> flightSchedulePlans) {
+    private FlightSchedule selectFlightSchedule(List<FlightSchedulePlan> flightSchedulePlans) throws NoFlightScheduleFoundException {
+        if (flightSchedulePlans.size() < 1) {
+            throw new NoFlightScheduleFoundException("No flight schedules found!");
+        }
         System.out.println("*** Select flight schedule ***");
         sc.nextLine();
         List<FlightSchedule> flightSchedules = new ArrayList<>();
