@@ -67,14 +67,7 @@ public class FlightSchedulePlanSessionBean implements FlightSchedulePlanSessionB
     
     @Override
     // Ensure that the flight's flight schedule plans do not have overlapping flight schedules
-    public Long createNewFlightSchedulePlan(FlightSchedulePlan newFsp, Flight flight) throws FlightSchedulesOverlapException {
-        
-        for (FlightSchedulePlan fsp:flight.getFlightSchedulePlans()) {
-            if (checkOverlap(newFsp, fsp)) {
-                throw new FlightSchedulesOverlapException("Flight schedules overlap with an existing flight schedule plan!");
-            }
-        }
-        
+    public Long createNewFlightSchedulePlan(FlightSchedulePlan newFsp, Flight flight) {
         newFsp.setFlight(flight);
         em.persist(newFsp);
         em.flush();

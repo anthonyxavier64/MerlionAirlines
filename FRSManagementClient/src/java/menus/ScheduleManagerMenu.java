@@ -72,59 +72,52 @@ public class ScheduleManagerMenu {
             System.out.println("7: Logout\n");
             response = 0;
 
-            OUTER:
             while (response < 1 || response > 7) {
                 System.out.print("> ");
                 response = sc.nextInt();
-                switch (response) {
-                    case 1:
-                        try {
+                
+                if (response == 1) {
+                    try {
                         createFlight(flightSessionBeanRemote, flightRouteSessionBeanRemote,
                                 aircraftConfigurationSessionBeanRemote);
                     } catch (FlightAlreadyExistException ex) {
                         System.out.println("Error creating flight: " + ex.getMessage());
                     }
-                    break;
-                    case 2:
-                        viewAllFlights(flightSessionBeanRemote);
-                        break;
-                    case 3:
-                        try {
+                    
+                } else if (response == 2) {
+                    viewAllFlights(flightSessionBeanRemote);
+                    
+                } else if (response == 3) {
+                    try {
                         viewFlightDetails(flightSessionBeanRemote);
                     } catch (FlightDoesNotExistException ex) {
                         System.out.println("Error viewing flight details: " + ex.getMessage());
                     }
-                    break;
 
-                    case 4:
-                        try {
+                } else if (response == 4) {
+                    try {
                         updateFlight(flightSessionBeanRemote, aircraftConfigurationSessionBeanRemote, flightRouteSessionBeanRemote);
                     } catch (FlightDoesNotExistException ex) {
                         System.out.println("Error updating flight: " + ex.getMessage());
                     }
-                    break;
-
-                    case 5: 
-                        try {
+                } else if (response == 5) {
+                    try {
                         deleteFlight(flightSessionBeanRemote);
                     } catch (FlightDoesNotExistException ex) {
                         System.out.println("Error deleting flight: " + ex.getMessage());
                     }
-                    break;
 
-                    case 6:
-                        try {
+                } else if (response == 6) {
+                    try {
                         createFlightSchedulePlan(flightSchedulePlanSessionBeanRemote, flightSessionBeanRemote, flightScheduleSessionBeanRemote);
                     } catch (FlightDoesNotExistException ex) {
                         System.out.println("Error creating flight schedule plan: " + ex.getMessage());
                     }
+                } else if (response == 7) {
+                    break;
 
-                    case 7:
-                        break OUTER;
-
-                    default:
-                        System.out.println("Invalid option, please try again!\n");
-                        break;
+                } else {
+                    System.out.println("Invalid option, please try again!\n");
                 }
             }
         }
@@ -251,28 +244,26 @@ public class ScheduleManagerMenu {
                 System.out.println("Invalid flight schedule type!");
                 break;
         }
-        
+
     }
 
     private void createComplementaryFlightSchedulePlan(Flight flight, FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote,
             FlightSessionBeanRemote flightSessionBeanRemote,
             FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote) {
-        
-        if (selectedFlightRoute.getComplementaryFlightRoute() != null) {
-            System.out.println("Selected flight route has a complementary flight route!");
+
+        if (flight.getComplementaryFlight() != null) {
+            System.out.println("Selected flight schedule plan has a complementary return flight!");
             sc.nextLine();
-            System.out.print("Create complementary return flight? Y/N> ");
+            System.out.print("Create complementary return flight schedule plan? Y/N> ");
             String ans = sc.nextLine().toLowerCase();
             if (ans.equals("y")) {
-                System.out.print("Enter flight number> ");
-                String complementaryFlightNumber = sc.nextLine();
+                Long fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight.getComplementaryFlight());
                 FlightRoute complementaryFlightRoute = selectedFlightRoute.getComplementaryFlightRoute();
                 Long complementartyFlightId = flightSessionBeanRemote.createComplementaryFlight(complementaryFlightNumber, complementaryFlightRoute.getFlightRouteId(),
                         flight.getAircraftConfiguration().getAircraftConfigurationID(), flight.getFlightID());
-  
-        
-    }
-    
+
+            }
+
     private void deleteFlight(FlightSessionBeanRemote flightSessionBeanRemote) throws FlightDoesNotExistException {
         System.out.println("*** Delete flight ***\n");
         sc.nextLine();
@@ -519,6 +510,6 @@ public class ScheduleManagerMenu {
         LocalDateTime departureDateTime = readDate();
         Duration duration = readDuration();
         FlightSchedule flightSchedule = new FlightSchedule(departureDateTime, duration);
-        
+
     }
 }
