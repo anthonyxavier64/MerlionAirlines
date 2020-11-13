@@ -24,36 +24,49 @@ public class Airport implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long airportID;
-    
+
     @Column(unique = true, nullable = false)
     @NotNull
     private String airportName;
-    
+
     @Column(unique = true, nullable = false)
     @NotNull
     private String IATACode;
-    
+
     @Column(nullable = false)
     @NotNull
     private String country;
-    
+
     @Column(nullable = false)
     @NotNull
     private String city;
-    
+
     @Column(nullable = false)
     @NotNull
     private String state;
 
+    @Column(nullable = false)
+    @NotNull
+    private int timeZone;
+
     public Airport() {
     }
 
-    public Airport(String airportName, String airportCode, String country, String city, String state) {
+    public Airport(String airportName, String airportCode, String country, String city, String state, int timeZone) {
         this.airportName = airportName;
         this.IATACode = airportCode;
         this.country = country;
         this.city = city;
         this.state = state;
+        this.timeZone = timeZone;
+    }
+
+    public int getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(int timeZone) {
+        this.timeZone = timeZone;
     }
 
     public Long getAirportID() {

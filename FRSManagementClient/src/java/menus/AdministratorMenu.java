@@ -57,7 +57,9 @@ public class AdministratorMenu {
                     String city = sc.nextLine();
                     System.out.print("Enter airport state> ");
                     String state = sc.nextLine();
-                    Long airportId = airportSessionBeanRemote.createAirport(airportName, airportCode, country, city, state);
+                    System.out.print("Enter airport time zone> ");
+                    int timeZone = sc.nextInt();
+                    Long airportId = airportSessionBeanRemote.createAirport(airportName, airportCode, country, city, state, timeZone);
                     System.out.println("Airport with ID " + airportId + " successfully created!");
                 } else if (response == 2) {
                     break;

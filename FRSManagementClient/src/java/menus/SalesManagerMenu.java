@@ -157,7 +157,7 @@ public class SalesManagerMenu {
             }
         }
         for (int i = 1; i <= flightSchedules.size(); i++) {
-            System.out.println(i + ": " + flightSchedules.get(i).getDepartureDateTime());
+            System.out.println(i + ": " + flightSchedules.get(i - 1).getDepartureDateTime());
         }
         System.out.print("> ");
         int answer = sc.nextInt() - 1;

@@ -5,11 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.Airport;
 import entity.FlightSchedule;
 import exception.FlightScheduleAlreadyExistException;
 import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -18,6 +20,12 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface FlightScheduleSessionBeanRemote {
+
     public FlightSchedule createNewFlightSchedule(FlightSchedule flightSchedule);
+
     public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays);
+
+    List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers);
+
+    List<FlightSchedule> getConnectingFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers);
 }

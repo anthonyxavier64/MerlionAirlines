@@ -41,7 +41,7 @@ public class Fare implements Serializable {
 
     @Column(nullable = false)
     @NotNull
-    private BigDecimal fareAmount;
+    private Double fareAmount;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
@@ -54,7 +54,7 @@ public class Fare implements Serializable {
     public Fare() {
     }
 
-    public Fare(CabinType cabinType, String fareBasisCode, BigDecimal fareAmount) {
+    public Fare(CabinType cabinType, String fareBasisCode, Double fareAmount) {
         this.cabinType = cabinType;
         this.fareBasisCode = fareBasisCode;
         this.fareAmount = fareAmount;
@@ -101,11 +101,11 @@ public class Fare implements Serializable {
         this.fareBasisCode = fareBasisCode;
     }
 
-    public BigDecimal getFareAmount() {
+    public Double getFareAmount() {
         return fareAmount;
     }
 
-    public void setFareAmount(BigDecimal fareAmount) {
+    public void setFareAmount(Double fareAmount) {
         this.fareAmount = fareAmount;
     }
 

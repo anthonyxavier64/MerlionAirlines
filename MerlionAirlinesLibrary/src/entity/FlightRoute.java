@@ -49,6 +49,8 @@ public class FlightRoute implements Serializable {
     @JoinColumn(nullable = false)
     private Airport destination;
 
+    private int timeZoneDifference;
+
     @OneToMany(mappedBy = "flightRoute")
     private List<Flight> flights = new ArrayList<>();
 
@@ -63,6 +65,15 @@ public class FlightRoute implements Serializable {
         this.twoWay = false;
         this.origin = origin;
         this.destination = destination;
+        this.timeZoneDifference = destination.getTimeZone() - origin.getTimeZone();
+    }
+
+    public int getTimeZoneDifference() {
+        return timeZoneDifference;
+    }
+
+    public void setTimeZoneDifference(int timeZoneDifference) {
+        this.timeZoneDifference = timeZoneDifference;
     }
 
     public Long getFlightRouteId() {

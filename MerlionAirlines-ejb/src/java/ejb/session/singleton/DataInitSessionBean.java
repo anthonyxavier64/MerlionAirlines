@@ -43,13 +43,13 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(Airport.class, 2l) == null) {
-            airportSessionBean.createAirport("Malaysia Airport", "MSA", "Malaysia", "Malaysia", "Malaysia");
-            airportSessionBean.createAirport("Japan Airport", "JPA", "Japan", "Japan", "Japan");
-            airportSessionBean.createAirport("China Airport", "CHI", "China", "China", "China");
-            airportSessionBean.createAirport("Bangkok Airport", "BKK", "Bangkok", "Bangkok", "Bangkok");
-            airportSessionBean.createAirport("Italy Airport", "ITA", "Italy", "Italy", "Italy");
-            airportSessionBean.createAirport("Indonesia Airport", "IDO", "Indonesia", "Indonesia", "Indonesia");
-            airportSessionBean.createAirport("Brunei Airport", "BRU", "Brunei", "Brunei", "Brunei");
+            airportSessionBean.createAirport("Malaysia Airport", "MSA", "Malaysia", "Malaysia", "Malaysia", 8);
+            airportSessionBean.createAirport("Japan Airport", "JPA", "Japan", "Japan", "Japan", 6);
+            airportSessionBean.createAirport("China Airport", "CHI", "China", "China", "China", 5);
+            airportSessionBean.createAirport("Bangkok Airport", "BKK", "Bangkok", "Bangkok", "Bangkok", -7);
+            airportSessionBean.createAirport("Italy Airport", "ITA", "Italy", "Italy", "Italy", -6);
+            airportSessionBean.createAirport("Indonesia Airport", "IDO", "Indonesia", "Indonesia", "Indonesia", 3);
+            airportSessionBean.createAirport("Brunei Airport", "BRU", "Brunei", "Brunei", "Brunei", 2);
             aircraftTypeSessionBean.createAircraftType("Boeing 748", 400);
             aircraftTypeSessionBean.createAircraftType("Boeing 749", 300);
             aircraftTypeSessionBean.createAircraftType("Boeing 750", 200);

@@ -17,6 +17,7 @@ import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -50,7 +51,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
             return flightSchedule;
         }
     }
-    
+
     public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays) {
         for (LocalDateTime date = startDateTime; date.isBefore(endDateTime); date = date.plusDays(intervalByDays)) {
             FlightSchedule newFlightSchedule = createNewFlightSchedule(new FlightSchedule(date, duration));
@@ -61,41 +62,105 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
             }
         }
     }
-    
+
     private void addFlightScheduleToFlightSchedulePlan(Long flightSchedulePlanId, Long flightScheduleId) throws FlightSchedulesOverlapException {
         // Need to ensure that flight schedule is not already added 
         FlightSchedulePlan fsp = em.find(FlightSchedulePlan.class, flightSchedulePlanId);
         FlightSchedule flightSchedule = em.find(FlightSchedule.class, flightScheduleId);
-        
+
         // Need to ensure that flight schedule is not already added
         List<FlightSchedulePlan> existingPlans = fsp.getFlight().getFlightSchedulePlans();
         for (FlightSchedulePlan plan : existingPlans) {
             for (FlightSchedule fs : plan.getFlightSchedules()) {
-                if (fs.getDepartureDateTime().equals(flightSchedule.getDepartureDateTime()) && fs.getDuration().equals(flightSchedule.getDuration()))
+                if (fs.getDepartureDateTime().equals(flightSchedule.getDepartureDateTime()) && fs.getDuration().equals(flightSchedule.getDuration())) {
                     throw new FlightSchedulesOverlapException("Flight schedules overlap with an existing flight schedule plan!");
+                }
             }
         }
-        
+
         fsp.getFlightSchedules().add(flightSchedule);
         em.flush();
-    } 
-    
+    }
+
     public List<FlightSchedule> searchOneWayDirectFlightOnDay(TripType tripType, Airport departureAirport, Airport destinationAirport, LocalDate departureDate, int numPassengers, FlightType flightTypePreference, CabinType cabinTypePreference) {
-        boolean twoWay = true;    
+        boolean twoWay = true;
         if (tripType == TripType.ONEWAY) {
             twoWay = false;
         }
         Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.twoWay = ?1 AND fs.flightSchedulePlan.flight.flightRoute.origin = ?2 AND fs.flightSchedulePlan.flight.flightRoute.destination = ?3");
         List<FlightSchedule> filter1 = query.getResultList();
         List<FlightSchedule> result = new ArrayList<>();
-        
+
         for (FlightSchedule fs : filter1) {
             if (departureDate.equals(fs.getDepartureDateTime().toLocalDate())) {
                 int numAvailSeats = 0;
-                for(SeatInventory seatInv : fs.getSeatInventories()) {
+                for (SeatInventory seatInv : fs.getSeatInventories()) {
                 }
             }
         }
         return null;
     }
+
+    @Override
+    public List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers) {
+        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination = :destinationAirport AND fs.departureDateTime = :departureDate");
+        query.setParameter("departureAirport", departureAirport);
+        query.setParameter("destinationAirport", destinationAirport);
+        query.setParameter("depatureDate", depatureDate);
+        List<FlightSchedule> flightSchedules = query.getResultList();
+        List<FlightSchedule> flightSchedulesFiltered = new ArrayList<>();
+        for (FlightSchedule f : flightSchedules) {
+            int availableSeats = 0;
+            List<SeatInventory> seatInventories = f.getSeatInventories();
+            for (SeatInventory s : seatInventories) {
+                availableSeats += s.getAvailableSeats();
+                if (availableSeats >= numPassengers) {
+                    flightSchedulesFiltered.add(f);
+                    break;
+                }
+            }
+        }
+        return flightSchedulesFiltered;
+    }
+
+    @Override
+    public List<FlightSchedule> getConnectingFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers) {
+        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination <> :destinationAirport AND fs.departureDateTime = :departureDate");
+        query.setParameter("departureAirport", departureAirport);
+        query.setParameter("destinationAirport", destinationAirport);
+        query.setParameter("depatureDate", depatureDate);
+        List<FlightSchedule> flightSchedulesFiltered = new ArrayList<>();
+        List<FlightSchedule> flightSchedules = query.getResultList();
+        for (FlightSchedule f : flightSchedules) {
+            int availableSeats = 0;
+            List<SeatInventory> seatInventories = f.getSeatInventories();
+            for (SeatInventory s : seatInventories) {
+                availableSeats += s.getAvailableSeats();
+            }
+            if (availableSeats < numPassengers) {
+                flightSchedules.remove(f);
+            }
+        }
+        for (FlightSchedule f : flightSchedules) {
+            departureAirport = f.getFlightSchedulePlan().getFlight().getFlightRoute().getDestination();
+            query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination = :destinationAirport");
+            try {
+                FlightSchedule cf = (FlightSchedule) query.getSingleResult();
+                long hours = ChronoUnit.HOURS.between(f.getArrivalDateTime(), cf.getDepartureDateTime());
+                List<SeatInventory> seatInventories = cf.getSeatInventories();
+                int availableSeats = 0;
+                for (SeatInventory s : seatInventories) {
+                    availableSeats += s.getAvailableSeats();
+                }
+                if (hours <= 24 && hours > 0 && availableSeats >= numPassengers) {
+                    flightSchedulesFiltered.add(f);
+                    flightSchedulesFiltered.add(cf);
+                }
+            } catch (NoResultException ex) {
+                continue;
+            }
+        }
+        return flightSchedulesFiltered;
+    }
+
 }
