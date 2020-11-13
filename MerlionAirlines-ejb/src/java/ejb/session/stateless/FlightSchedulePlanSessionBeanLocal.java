@@ -20,8 +20,9 @@ public interface FlightSchedulePlanSessionBeanLocal {
 
     public List<FlightSchedulePlan> viewAllFlightSchedulePlans();
 
-    public Long createNewFlightSchedulePlan(FlightSchedulePlan newFsp, Flight flight) throws FlightSchedulesOverlapException;
+    public Long createNewFlightSchedulePlan(FlightSchedulePlan newFsp, Flight flight);
 
     public void addFlightScheduleToFlightSchedulePlan(Long flightSchedulePlanId, Long flightScheduleId) throws FlightSchedulesOverlapException;
-    
+        public FlightSchedulePlan retrieveFSPById(Long id);
+
 }

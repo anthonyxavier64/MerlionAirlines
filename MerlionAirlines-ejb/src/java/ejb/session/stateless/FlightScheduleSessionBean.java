@@ -11,7 +11,6 @@ import entity.FlightSchedule;
 import entity.FlightSchedulePlan;
 import entity.SeatInventory;
 import enumeration.CabinType;
-import enumeration.FlightType;
 import enumeration.TripType;
 import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
@@ -58,7 +57,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
             try {
                 addFlightScheduleToFlightSchedulePlan(flightSchedulePlanId, newFlightSchedule.getFlightScheduleID());
             } catch (FlightSchedulesOverlapException ex) {
-                continue;
             }
         }
     }

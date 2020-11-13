@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Airport;
 import entity.FlightSchedule;
+import entity.FlightSchedulePlan;
 import exception.FlightScheduleAlreadyExistException;
 import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
