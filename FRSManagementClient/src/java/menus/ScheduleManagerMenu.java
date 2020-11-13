@@ -222,12 +222,12 @@ public class ScheduleManagerMenu {
             System.out.println("Invalid flight schedule type!");
             return;
         }
-        
+
         enterFare(fspId, fareSessionBeanRemote, flightSchedulePlanSessionBeanRemote);
         FlightSchedulePlan fsp = flightSchedulePlanSessionBeanRemote.retrieveFSPById(fspId);
         createComplementaryFlightSchedulePlan(fsp, flightSchedulePlanSessionBeanRemote,
-            flightSessionBeanRemote,
-            flightScheduleSessionBeanRemote);
+                flightSessionBeanRemote,
+                flightScheduleSessionBeanRemote);
 
     }
 
@@ -240,7 +240,7 @@ public class ScheduleManagerMenu {
             Fare fare = fareSessionBeanRemote.retrieveFareByFareBasisCode(fareBasisCode);
             if (fare == null) {
                 System.out.print("Enter fare amount>");
-                BigDecimal fareAmount = sc.nextBigDecimal();
+                Double fareAmount = sc.nextDouble();
                 fare = new Fare(cb.getCabinType(), fareBasisCode, fareAmount);
                 fareSessionBeanRemote.addFareToFlightSchedulePlan(fspId, cb.getCabinClassID(), fare);
             }
@@ -323,20 +323,20 @@ public class ScheduleManagerMenu {
             System.out.print("> ");
             response = sc.nextInt();
             if (response == 1) {
-                    String newFlightNumber = updateFlightNumber(flightSessionBeanRemote, flightNumber);
-                    flightNumber = newFlightNumber;
+                String newFlightNumber = updateFlightNumber(flightSessionBeanRemote, flightNumber);
+                flightNumber = newFlightNumber;
 
             } else if (response == 2) {
-                    updateAircraftConfiguration(flightSessionBeanRemote, aircraftConfigurationSessionBeanRemote, flightNumber);
-                    
+                updateAircraftConfiguration(flightSessionBeanRemote, aircraftConfigurationSessionBeanRemote, flightNumber);
+
             } else if (response == 3) {
                 updateFlightRoute(flightSessionBeanRemote, flightRouteSessionBeanRemote, flightNumber);
 
-            } else if (response == 4) {                    
+            } else if (response == 4) {
                 break;
             } else {
-                    System.out.println("Invalid option, please try again!\n");
-                    break;
+                System.out.println("Invalid option, please try again!\n");
+                break;
             }
         }
     }

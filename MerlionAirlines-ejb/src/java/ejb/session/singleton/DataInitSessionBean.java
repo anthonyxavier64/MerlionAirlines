@@ -24,7 +24,7 @@ import javax.persistence.PersistenceContext;
  */
 @Singleton
 @LocalBean
-@Startup
+//@Startup
 public class DataInitSessionBean {
 
     private PartnerSessionBeanLocal partnerSessionBean;

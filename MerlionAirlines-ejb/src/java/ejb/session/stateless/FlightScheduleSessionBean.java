@@ -80,25 +80,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
         em.flush();
     }
 
-    public List<FlightSchedule> searchOneWayDirectFlightOnDay(TripType tripType, Airport departureAirport, Airport destinationAirport, LocalDate departureDate, int numPassengers, FlightType flightTypePreference, CabinType cabinTypePreference) {
-        boolean twoWay = true;
-        if (tripType == TripType.ONEWAY) {
-            twoWay = false;
-        }
-        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.twoWay = ?1 AND fs.flightSchedulePlan.flight.flightRoute.origin = ?2 AND fs.flightSchedulePlan.flight.flightRoute.destination = ?3");
-        List<FlightSchedule> filter1 = query.getResultList();
-        List<FlightSchedule> result = new ArrayList<>();
-
-        for (FlightSchedule fs : filter1) {
-            if (departureDate.equals(fs.getDepartureDateTime().toLocalDate())) {
-                int numAvailSeats = 0;
-                for (SeatInventory seatInv : fs.getSeatInventories()) {
-                }
-            }
-        }
-        return null;
-    }
-
     @Override
     public List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers) {
         Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination = :destinationAirport AND fs.departureDateTime = :departureDate");

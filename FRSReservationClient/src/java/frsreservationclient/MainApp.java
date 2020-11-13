@@ -304,56 +304,56 @@ public class MainApp {
 
     private int displayDirectFlightSchedules(Airport departureAirport, Airport destinationAirport, LocalDateTime departureDate, Integer numPassengers, FlightType flightPreference,
             List<FlightSchedule> flightSchedules, int index) {
-        
+
         List<FlightSchedule> flightSchedulesOnDate = flightScheduleSessionBeanRemote.getFlightSchedules(departureAirport,
                 destinationAirport, departureDate.toLocalDate(), numPassengers);
         if (flightSchedulesOnDate.size() > 0) {
             System.out.println("*** Flight schedules departing on " + departureDate.toLocalDate().toString() + " ***");
             index = addToFlightSchedules(flightSchedules, flightSchedulesOnDate, index, numPassengers);
         }
-        
+
         List<FlightSchedule> flightSchedulesThreeDaysBefore = flightScheduleSessionBeanRemote
                 .getFlightSchedules(departureAirport, destinationAirport, departureDate.toLocalDate().minusDays(3), numPassengers);
         if (flightSchedulesThreeDaysBefore.size() > 0) {
             System.out.println("*** Flight schedules departing on " + departureDate.minusDays(3).toLocalDate().toString() + " ***");
             index = addToFlightSchedules(flightSchedules, flightSchedulesThreeDaysBefore, index, numPassengers);
         }
-        
+
         List<FlightSchedule> flightSchedulesTwoDaysBefore = flightScheduleSessionBeanRemote
                 .getFlightSchedules(departureAirport, destinationAirport, departureDate.toLocalDate().minusDays(2), numPassengers);
         if (flightSchedulesTwoDaysBefore.size() > 0) {
             System.out.println("*** Flight schedules departing on " + departureDate.minusDays(2).toLocalDate().toString() + " ***");
             index = addToFlightSchedules(flightSchedules, flightSchedulesTwoDaysBefore, index, numPassengers);
         }
-        
+
         List<FlightSchedule> flightSchedulesOneDayBefore = flightScheduleSessionBeanRemote
                 .getFlightSchedules(departureAirport, destinationAirport, departureDate.toLocalDate().minusDays(1), numPassengers);
         if (flightSchedulesOneDayBefore.size() > 0) {
             System.out.println("*** Flight schedules departing on " + departureDate.minusDays(1).toLocalDate().toString() + " ***");
             index = addToFlightSchedules(flightSchedules, flightSchedulesOneDayBefore, index, numPassengers);
         }
-        
+
         List<FlightSchedule> flightSchedulesOneDayAfter = flightScheduleSessionBeanRemote
                 .getFlightSchedules(departureAirport, destinationAirport, departureDate.toLocalDate().plusDays(1), numPassengers);
         if (flightSchedulesOneDayAfter.size() > 0) {
             System.out.println("*** Flight schedules departing on " + departureDate.plusDays(1).toLocalDate().toString() + " ***");
             index = addToFlightSchedules(flightSchedules, flightSchedulesOneDayAfter, index, numPassengers);
         }
-        
+
         List<FlightSchedule> flightSchedulesTwoDaysAfter = flightScheduleSessionBeanRemote
                 .getFlightSchedules(departureAirport, destinationAirport, departureDate.toLocalDate().plusDays(2), numPassengers);
         if (flightSchedulesTwoDaysAfter.size() > 0) {
             System.out.println("*** Flight schedules departing on " + departureDate.plusDays(2).toLocalDate().toString() + " ***");
             index = addToFlightSchedules(flightSchedules, flightSchedulesTwoDaysAfter, index, numPassengers);
         }
-        
+
         List<FlightSchedule> flightSchedulesThreeDaysAfter = flightScheduleSessionBeanRemote
                 .getFlightSchedules(departureAirport, destinationAirport, departureDate.toLocalDate().plusDays(3), numPassengers);
         if (flightSchedulesThreeDaysAfter.size() > 0) {
             System.out.println("*** Flight schedules departing on " + departureDate.plusDays(3).toLocalDate().toString() + " ***");
             index = addToFlightSchedules(flightSchedules, flightSchedulesThreeDaysAfter, index, numPassengers);
         }
-        
+
         /*
         if (flightPreference == FlightType.DIRECT) {
             System.out.print("Select flight schedule> ");
@@ -361,7 +361,6 @@ public class MainApp {
             return answer - 1;
         }
          */
-        
         return index - 1;
     }
 

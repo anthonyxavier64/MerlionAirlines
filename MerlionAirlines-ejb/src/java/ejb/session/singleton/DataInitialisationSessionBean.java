@@ -45,14 +45,19 @@ public class DataInitialisationSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(Employee.class, 1l) == null) {
-            employeeSessionBean.createEmployee("Administrator", "administrator", "password", EmployeeType.ADMINISTRATOR);
+            //employeeSessionBean.createEmployee("Administrator", "administrator", "password", EmployeeType.ADMINISTRATOR);
             employeeSessionBean.createEmployee("Fleet Manager", "fleetmanager", "password", EmployeeType.FLEET_MANAGER);
             employeeSessionBean.createEmployee("Route Planner", "routeplanner", "password", EmployeeType.ROUTE_PLANNER);
             employeeSessionBean.createEmployee("Schedule Manager", "schedulemanager", "password", EmployeeType.SCHEDULE_MANAGER);
             employeeSessionBean.createEmployee("Sales Manager", "salesmanager", "password", EmployeeType.SALES_MANAGER);
-            partnerSessionBean.createPartner("Partner", "partner", "password");
-            airportSessionBean.createAirport("Singapore Changi Airport", "SIN", "Singapore", "Singapore", "Singapore", 8);
-            aircraftTypeSessionBean.createAircraftType("Boeing 747", 500);
+            partnerSessionBean.createPartner("Holiday.com", "holidaydotcom", "password");
+            airportSessionBean.createAirport("Changi", "SIN", "Singapore", "Singapore", "Singapore", 8);
+            airportSessionBean.createAirport("Hong Kong", "HKG", "Chek Lap Kok", "Hong Kong", "China", 8);
+            airportSessionBean.createAirport("Taoyuan", "TPE", "Taoyuan", "Taipei", "Taiwan R.O.C", 8);
+            airportSessionBean.createAirport("Narita", "NRT", "Narita", "Chiba", "Japan", 9);
+            airportSessionBean.createAirport("Sydney", "SYD", "Sydney", "New South Wales", "Australia", 9);
+            aircraftTypeSessionBean.createAircraftType("Boeing 737", 200);
+            aircraftTypeSessionBean.createAircraftType("Boeing 747", 400);
         }
     }
 
