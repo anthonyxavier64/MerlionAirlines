@@ -129,7 +129,6 @@ public class ScheduleManagerMenu {
         Flight flight = flightSessionBeanRemote.retrieveFlightByFlightNumber(flightNumber);
 
         System.out.println("*** Create flight schedule(s) ***");
-        sc.nextLine();
         System.out.println("Enter flight schedule type to be created\n(single / multiple / recurrent weekly / recurrent by days)>");
         System.out.println("1: Single");
         System.out.println("2: Multiple");
@@ -144,7 +143,9 @@ public class ScheduleManagerMenu {
 
         if (ans == 1) {
             createSingleFlightSchedule(flightScheduleSessionBeanRemote);
+            System.out.println("Enter flight departure date and time:");
             departureDateTime = readDate();
+            System.out.println("Enter flight duration:");
             duration = readDuration();
             FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
             try {
@@ -157,7 +158,9 @@ public class ScheduleManagerMenu {
         } else if (ans == 2) {
             char response = 'Y';
             while (response == 'Y') {
+                System.out.println("Enter flight departure date and time:");
                 departureDateTime = readDate();
+                System.out.println("Enter flight duration:");
                 duration = readDuration();
                 FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
                 try {
@@ -178,19 +181,8 @@ public class ScheduleManagerMenu {
             departureDateTime = readDate();
             duration = readDuration();
             LocalDateTime endDateTime;
-            while (true) {
-                System.out.println("Enter end date and time (dd/MM/yyyy HH:mm)");
-                String dateTimeString = sc.nextLine();
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-                try {
-                    endDateTime = LocalDateTime.parse(dateTimeString, format);
-                    break;
-
-                } catch (DateTimeParseException ex) {
-                    System.out.println("Incorrect date format! Try again with the format (dd/MM/yyyy HH:mm)");
-                }
-            }
+            System.out.println("Enter end date and time:");
+            endDateTime = readDate();
 
             fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
             flightScheduleSessionBeanRemote.addRecurringFlightSchedules(fspId, departureDateTime, duration, endDateTime, n);
@@ -198,26 +190,17 @@ public class ScheduleManagerMenu {
 
         } else if (ans == 4) {
             int n = 7;
+            System.out.println("Enter flight departure date and time:");
             departureDateTime = readDate();
+            System.out.println("Enter flight duration:");
             duration = readDuration();
-            LocalDateTime endDateTime;
-            while (true) {
-                System.out.println("Enter end date and time (dd/MM/yyyy HH:mm)");
-                String dateTimeString = sc.nextLine();
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-                try {
-                    endDateTime = LocalDateTime.parse(dateTimeString, format);
-                    break;
-
-                } catch (DateTimeParseException ex) {
-                    System.out.println("Incorrect date format! Try again with the format (dd/MM/yyyy HH:mm)");
-                }
-            }
+            System.out.println("Enter end date and time:");
+            LocalDateTime endDateTime = readDate();
 
             fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
             flightScheduleSessionBeanRemote.addRecurringFlightSchedules(fspId, departureDateTime, duration, endDateTime, n);
             System.out.println("Recurring weekly flight schedule successfully created!");
+        
         } else {
             System.out.println("Invalid flight schedule type!");
             return;
@@ -225,6 +208,7 @@ public class ScheduleManagerMenu {
 
         enterFare(fspId, fareSessionBeanRemote, flightSchedulePlanSessionBeanRemote);
         FlightSchedulePlan fsp = flightSchedulePlanSessionBeanRemote.retrieveFSPById(fspId);
+
         createComplementaryFlightSchedulePlan(fsp, flightSchedulePlanSessionBeanRemote,
                 flightSessionBeanRemote,
                 flightScheduleSessionBeanRemote);
@@ -482,29 +466,32 @@ public class ScheduleManagerMenu {
     }
 
     private LocalDateTime readDate() {
-        LocalDateTime departureDateTime;
-        while (true) {
-            System.out.println("Enter departure date and time (dd/MM/yyyy HH:mm)");
-            String dateTimeString = sc.nextLine();
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        LocalDateTime dateTime;
+        System.out.print("Enter year>");
+        int year = sc.nextInt();
+        System.out.print("Enter month (as integer)>");
+        int month = sc.nextInt();
+        System.out.print("Enter day of month>");
+        int day = sc.nextInt();
+        System.out.print("Enter hour>");
+        int hour = sc.nextInt();
+        System.out.print("Enter minute>");
+        int min = sc.nextInt();
 
-            try {
-                departureDateTime = LocalDateTime.parse(dateTimeString, format);
-                return departureDateTime;
-
-            } catch (DateTimeParseException ex) {
-                System.out.println("Incorrect date format! Try again with the format (dd/MM/yyyy HH:mm)");
-            }
-        }
+        LocalDateTime date = LocalDateTime.of(year, month, day, hour, min);
+        return date;
     }
 
     private Duration readDuration() {
-        System.out.print("Enter Duration (hours:minutes)> ");
-        String s = sc.nextLine().trim();
-        String[] values = s.split(":");
-        // get the hours, minutes and seconds value and add it to the duration
-        Duration duration = Duration.ofHours(Long.parseLong(values[0]));
-        duration.plusMinutes(Long.parseLong(values[1]));
+        Duration duration = Duration.ZERO;
+        System.out.print("Enter duration hours>");
+        int hour = sc.nextInt();
+        duration.plusHours(hour);
+
+        System.out.print("Enter duration minutes>");
+        int min = sc.nextInt();
+        duration.plusMinutes(min);
+
         return duration;
     }
 
