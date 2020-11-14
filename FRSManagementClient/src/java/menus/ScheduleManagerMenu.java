@@ -150,9 +150,9 @@ public class ScheduleManagerMenu {
             departureDateTime = readDate();
             System.out.println("Enter flight duration:");
             duration = readDuration();
-            FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
             try {
                 fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
+                FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration), fspId);
                 flightSchedulePlanSessionBeanRemote.addFlightScheduleToFlightSchedulePlan(fspId, flightSchedule.getFlightScheduleID());
             } catch (FlightSchedulesOverlapException ex) {
                 System.out.println("Unable to create flight schedule plan " + ex.getMessage());
@@ -165,9 +165,9 @@ public class ScheduleManagerMenu {
                 departureDateTime = readDate();
                 System.out.println("Enter flight duration:");
                 duration = readDuration();
-                FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration));
                 try {
                     fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
+                    FlightSchedule flightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(departureDateTime, duration), fspId);
                     flightSchedulePlanSessionBeanRemote.addFlightScheduleToFlightSchedulePlan(fspId, flightSchedule.getFlightScheduleID());
                 } catch (FlightSchedulesOverlapException ex) {
                     System.out.println("Unable to create flight schedule plan " + ex.getMessage());
@@ -203,7 +203,7 @@ public class ScheduleManagerMenu {
             fspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), flight);
             flightScheduleSessionBeanRemote.addRecurringFlightSchedules(fspId, departureDateTime, duration, endDateTime, n);
             System.out.println("Recurring weekly flight schedule successfully created!");
-        
+
         } else {
             System.out.println("Invalid flight schedule type!");
             return;
@@ -249,9 +249,8 @@ public class ScheduleManagerMenu {
                 Long complFspId = flightSchedulePlanSessionBeanRemote.createNewFlightSchedulePlan(new FlightSchedulePlan(), fsp.getFlight().getComplementaryFlight());
 
                 for (FlightSchedule fs : fsp.getFlightSchedules()) {
-                    FlightSchedule newFlightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(fs.getArrivalDateTime().plus(layover), fs.getDuration()));
-                    newFlightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(newFlightSchedule);
                     try {
+                        FlightSchedule newFlightSchedule = flightScheduleSessionBeanRemote.createNewFlightSchedule(new FlightSchedule(fs.getArrivalDateTime().plus(layover), fs.getDuration()), complFspId);
                         flightSchedulePlanSessionBeanRemote.addFlightScheduleToFlightSchedulePlan(complFspId, newFlightSchedule.getFlightScheduleID());
 
                     } catch (FlightSchedulesOverlapException ex) {

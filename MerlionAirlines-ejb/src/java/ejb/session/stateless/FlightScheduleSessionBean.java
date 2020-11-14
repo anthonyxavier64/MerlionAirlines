@@ -37,24 +37,29 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
     private EntityManager em;
 
     @Override
-    public FlightSchedule createNewFlightSchedule(FlightSchedule flightSchedule) {
-        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.departureDateTime = ?1 AND fs.duration = ?2");
+    public FlightSchedule createNewFlightSchedule(FlightSchedule flightSchedule, long flightSchedulePlanId) throws FlightSchedulesOverlapException {
+        FlightSchedulePlan fsp = em.find(FlightSchedulePlan.class, flightSchedulePlanId);
+        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.departureDateTime = ?1 AND fs.duration = ?2 AND fs.flightSchedulePlan = ?3");
         query.setParameter(1, flightSchedule.getDepartureDateTime());
         query.setParameter(2, flightSchedule.getDuration());
+        query.setParameter(3, flightSchedule.getFlightSchedulePlan());
         try {
             flightSchedule = (FlightSchedule) query.getSingleResult();
-            return flightSchedule;
+            throw new FlightSchedulesOverlapException("Flight schedule already exists!");
+            
         } catch (NoResultException ex) {
+            flightSchedule.setFlightSchedulePlan(fsp);
             em.persist(flightSchedule);
             em.flush();
             return flightSchedule;
         }
     }
 
+    @Override
     public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays) {
         for (LocalDateTime date = startDateTime; date.isBefore(endDateTime); date = date.plusDays(intervalByDays)) {
-            FlightSchedule newFlightSchedule = createNewFlightSchedule(new FlightSchedule(date, duration));
             try {
+                FlightSchedule newFlightSchedule = createNewFlightSchedule(new FlightSchedule(date, duration), flightSchedulePlanId);
                 addFlightScheduleToFlightSchedulePlan(flightSchedulePlanId, newFlightSchedule.getFlightScheduleID());
             } catch (FlightSchedulesOverlapException ex) {
             }

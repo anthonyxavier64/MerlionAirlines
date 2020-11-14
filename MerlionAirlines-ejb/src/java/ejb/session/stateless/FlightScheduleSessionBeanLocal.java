@@ -22,7 +22,7 @@ import javax.ejb.Local;
 @Local
 public interface FlightScheduleSessionBeanLocal {
 
-    public FlightSchedule createNewFlightSchedule(FlightSchedule flightSchedule);
+    public FlightSchedule createNewFlightSchedule(FlightSchedule flightSchedule, long flightSchedulePlanId) throws FlightSchedulesOverlapException;
 
     public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays);
 
