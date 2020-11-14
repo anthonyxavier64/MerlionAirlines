@@ -115,6 +115,9 @@ public class ScheduleManagerMenu {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
+            if (response == 7) {
+                break;
+            }
         }
     }
 
@@ -260,8 +263,8 @@ public class ScheduleManagerMenu {
 
     private void deleteFlight(FlightSessionBeanRemote flightSessionBeanRemote) throws FlightDoesNotExistException {
         System.out.println("*** Delete flight ***\n");
-        sc.nextLine();
         System.out.print("Enter flight number> ");
+        sc.nextLine();
         String flightNumber = sc.nextLine();
 
         Flight flight = flightSessionBeanRemote.retrieveFlightByFlightNumber(flightNumber);
@@ -286,9 +289,9 @@ public class ScheduleManagerMenu {
 
     private void updateFlight(FlightSessionBeanRemote flightSessionBeanRemote, AircraftConfigurationSessionBeanRemote aircraftConfigurationSessionBeanRemote, FlightRouteSessionBeanRemote flightRouteSessionBeanRemote) throws FlightDoesNotExistException {
         System.out.println("*** Update flight ***\n");
-        sc.nextLine();
         System.out.print("Enter flight number> ");
-        String flightNumber = sc.nextLine();
+        sc.nextLine();
+        String flightNumber = sc.nextLine().trim();
 
         Flight flight = flightSessionBeanRemote.retrieveFlightByFlightNumber(flightNumber);
 
@@ -341,7 +344,8 @@ public class ScheduleManagerMenu {
 
     private String updateFlightNumber(FlightSessionBeanRemote flightSessionBeanRemote, String flightNumber) throws FlightDoesNotExistException {
         System.out.println("*** Update flight number ***\n");
-        System.out.println("Enter new flight number");
+        System.out.println("Enter new flight number>");
+        sc.nextLine();
         String newFlightNumber = sc.nextLine().trim();
 
         flightSessionBeanRemote.updateFlightNumber(flightNumber, newFlightNumber);
@@ -467,15 +471,15 @@ public class ScheduleManagerMenu {
 
     private LocalDateTime readDate() {
         LocalDateTime dateTime;
-        System.out.print("Enter year>");
+        System.out.print("Enter year> ");
         int year = sc.nextInt();
-        System.out.print("Enter month (as integer)>");
+        System.out.print("Enter month (as integer)> ");
         int month = sc.nextInt();
-        System.out.print("Enter day of month>");
+        System.out.print("Enter day of month> ");
         int day = sc.nextInt();
-        System.out.print("Enter hour>");
+        System.out.print("Enter hour> ");
         int hour = sc.nextInt();
-        System.out.print("Enter minute>");
+        System.out.print("Enter minute> ");
         int min = sc.nextInt();
 
         LocalDateTime date = LocalDateTime.of(year, month, day, hour, min);
@@ -484,11 +488,11 @@ public class ScheduleManagerMenu {
 
     private Duration readDuration() {
         Duration duration = Duration.ZERO;
-        System.out.print("Enter duration hours>");
+        System.out.print("Enter duration hours> ");
         int hour = sc.nextInt();
         duration.plusHours(hour);
 
-        System.out.print("Enter duration minutes>");
+        System.out.print("Enter duration minutes> ");
         int min = sc.nextInt();
         duration.plusMinutes(min);
 

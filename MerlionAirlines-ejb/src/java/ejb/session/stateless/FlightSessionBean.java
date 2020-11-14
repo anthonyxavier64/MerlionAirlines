@@ -90,6 +90,7 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
             complementaryFlight = (Flight) query.getSingleResult();
         }
         originalFlight.setComplementaryFlight(complementaryFlight);
+        complementaryFlight.setComplementaryFlight(originalFlight);
         complementaryFlight.setTwoWay(true);
         return complementaryFlight.getFlightID();
     }
@@ -127,7 +128,7 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
     @Override
     public Flight updateFlightNumber(String flightNumber, String newFlightNumber) throws FlightDoesNotExistException {
         Flight flight = retrieveFlightByFlightNumber(flightNumber);
-        flight.setFlightNumber(newFlightNumber);
+        flight.setFlightNumber("ML" + newFlightNumber);
         em.persist(flight);
         em.flush();
         return flight;
@@ -161,10 +162,11 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
                 FlightRoute flightRoute = flight.getFlightRoute();
                 flightRoute.getFlights().remove(flight);
 
-                // Diassociate flight from complementary flight
-                Flight complementaryFlight = flight.getComplementaryFlight();
-                complementaryFlight.setComplementaryFlight(null);
-                complementaryFlight.setTwoWay(false);
+                if (flight.getComplementaryFlight() != null) {
+                    Flight complementaryFlight = flight.getComplementaryFlight();
+                    complementaryFlight.setComplementaryFlight(null);
+                    complementaryFlight.setTwoWay(false);
+                }
 
                 em.remove(flight);
                 em.flush();
