@@ -49,6 +49,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
             throw new FlightSchedulesOverlapException("Flight schedule already exists!");
 
         } catch (NoResultException ex) {
+            fsp.getFlight().getFlightRoute().getDestination();
+            fsp.getFlight().getFlightRoute().getOrigin();
             flightSchedule.setFlightSchedulePlan(fsp);
             em.persist(flightSchedule);
             em.flush();

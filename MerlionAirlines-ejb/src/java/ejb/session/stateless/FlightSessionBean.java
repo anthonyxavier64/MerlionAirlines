@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.AircraftConfiguration;
+import entity.CabinClassConfiguration;
 import entity.Flight;
 import entity.FlightRoute;
 import enumeration.TripType;
@@ -107,6 +108,18 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
             if (!f.isEnabled()) {
                 continue;
             }
+            
+            f.getFlightRoute().getOrigin();
+            f.getFlightRoute().getDestination();
+            f.getAircraftConfiguration().getCabinClassConfigurations().size();
+            f.getAircraftConfiguration().getAircraftType();
+            f.getFlightRoute().getComplementaryFlightRoute();
+            f.getComplementaryFlight();
+            f.getFlightSchedulePlans().size();
+            for(CabinClassConfiguration ccc : f.getAircraftConfiguration().getCabinClassConfigurations()) {
+                ccc.getSeatNumbers();
+            }
+            
             if (f.getComplementaryFlight() != null && !flightsFiltered.contains(f.getComplementaryFlight())) {
                 flightsFiltered.add(f);
                 flightsFiltered.add(f.getComplementaryFlight());

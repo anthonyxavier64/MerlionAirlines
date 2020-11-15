@@ -404,7 +404,7 @@ public class ScheduleManagerMenu {
             FlightSchedulePlan fsp = fsps.get(i);
             if (fsp.isEnabled()) {
                 System.out.println((i + 1) + ": " + "Flight number -> " + fsp.getFlight().getFlightNumber()
-                        + " Type -> " + fsp.getFlightSchedulePlanType().name());
+                        + "; Type -> " + fsp.getFlightSchedulePlanType().name());
             }
         }
         System.out.println();
@@ -763,7 +763,8 @@ public class ScheduleManagerMenu {
             System.out.println("Invalid selection!");
             return;
         }
-        Flight flight = flights.get(selection - 1);
+        Flight flight = flights.get(selection - 1);   
+        
         System.out.println("Flight origin airport: " + flight.getFlightRoute().getOrigin().getIATACode());
         System.out.println("Flight destiantion airport: " + flight.getFlightRoute().getDestination().getIATACode());
         System.out.println("** Available cabin classes **");

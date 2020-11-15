@@ -53,6 +53,7 @@ public class FlightSchedulePlanSessionBean implements FlightSchedulePlanSessionB
         List<FlightSchedulePlan> results = new ArrayList<>(flightSchedulePlans);
         for (FlightSchedulePlan f : flightSchedulePlans) {
             f.getFlight().getAircraftConfiguration();
+            f.getFlight().getFlightNumber();
             f.getComplementaryFlightSchedulePlan();
             f.getFares().size();
             f.getFlightSchedules().size();
