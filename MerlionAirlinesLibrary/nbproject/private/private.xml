@@ -3,40 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/InvalidTripTypeException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/CustomerAlreadyExistsException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/enumeration/TripType.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/PartnerSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/FlightSchedulesOverlapException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/Airport.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/nbproject/private/private.properties</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/FlightRoute.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/FlightRouteSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/enumeration/CabinType.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/enumeration/FlightType.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/EmployeeSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/Employee.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/FlightScheduleAlreadyExistException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/CustomerSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/Customer.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/AirportSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/FlightSchedulePlan.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/AircraftConfiguration.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/CustomerAlreadyLoggedInException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/FlightSchedule.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/AirportDoesNotExistException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/InvalidCabinClassException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/Flight.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/AircraftConfigurationSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/FlightScheduleSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/InvalidChoiceException.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/FlightSchedulePlanSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/FlightSessionBeanRemote.java</file>
-            <file>file:/Users/yappeizhen/Desktop/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/CustomerNotFoundException.java</file>
-=======
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/FlightSchedulePlan.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/SeatInventorySessionBeanRemote.java</file>
+            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/enumeration/FlightType.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/FlightRouteSessionBeanRemote.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/FlightDoesNotExistException.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/EmployeeSessionBeanRemote.java</file>
@@ -59,6 +28,7 @@
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/Customer.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/CabinClassSessionBeanRemote.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/Passenger.java</file>
+            <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/FlightSchedulePlanSessionBeanRemote.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/Flight.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/MaximumCapacityExceeded.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/EmployeeNotFoundException.java</file>
@@ -70,7 +40,6 @@
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/entity/FlightRoute.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/exception/InvalidLoginCredentialException.java</file>
             <file>file:/C:/Users/Antho/Documents/School/IS2103/MerlionAirlines/MerlionAirlinesLibrary/src/ejb/session/stateless/FlightScheduleSessionBeanRemote.java</file>
->>>>>>> refs/remotes/origin/master
         </group>
     </open-files>
 </project-private>

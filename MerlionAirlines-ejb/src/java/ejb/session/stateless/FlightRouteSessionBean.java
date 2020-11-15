@@ -22,9 +22,11 @@ import javax.persistence.Query;
  */
 @Stateless
 public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, FlightRouteSessionBeanLocal {
-
+    
     @PersistenceContext(unitName = "MerlionAirlines-ejbPU")
     private EntityManager em;
+    
+    
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -43,7 +45,7 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
         }
         throw new FlightRouteAlreadyExistException("Flight route already exists!");
     }
-
+    
     @Override
     public Long createComplementaryFlightRoute(Airport origin, Airport destination, Long originalFlightRouteId) {
         FlightRoute originalFlightRoute = em.find(FlightRoute.class, originalFlightRouteId); // exception here if original flight route does not exist
@@ -62,16 +64,13 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
         complementaryFlightRoute.setTwoWay(true);
         return complementaryFlightRoute.getFlightRouteId();
     }
-
+    
     @Override
     public List<FlightRoute> viewAllFlightRoutes() {
-        Query query = em.createQuery("SELECT f FROM FlightRoute f ORDER BY f.origin.IATACode ASC");
+        Query query = em.createQuery("SELECT f FROM FlightRoute f ORDER BY f.origin ASC"); // Does not sort by alphabetical order
         List<FlightRoute> flightRoutes = query.getResultList();
         List<FlightRoute> flightRoutesFiltered = new ArrayList<>();
         for (FlightRoute f : flightRoutes) {
-            if (!f.isEnabled()) {
-                continue;
-            }
             if (f.getComplementaryFlightRoute() != null && f.isTwoWay()) {
                 flightRoutesFiltered.add(f);
                 flightRoutesFiltered.add(f.getComplementaryFlightRoute());
@@ -81,7 +80,7 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
         }
         return flightRoutesFiltered;
     }
-
+    
     @Override
     public void deleteFlightRoute(Long flightRouteId) {
         FlightRoute flightRoute = em.find(FlightRoute.class, flightRouteId);
@@ -99,5 +98,5 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
         }
         em.remove(flightRoute);
     }
-
+    
 }
