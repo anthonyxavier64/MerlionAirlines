@@ -5,16 +5,15 @@
  */
 package ejb.session.stateless;
 
-import entity.Passenger;
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author Antho
  */
-@Local
-public interface PassengerSessionBeanLocal {
+@Remote
+public interface SeatSessionBeanRemote {
 
-    Long createPassenger(Passenger passenger);
+    void addPassenger(long passengerId, long seatId);
     
 }

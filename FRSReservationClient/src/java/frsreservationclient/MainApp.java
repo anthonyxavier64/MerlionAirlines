@@ -7,6 +7,7 @@ package frsreservationclient;
 
 import ejb.session.stateless.AirportSessionBeanRemote;
 import ejb.session.stateless.CustomerSessionBeanRemote;
+import ejb.session.stateless.FareSessionBeanRemote;
 import ejb.session.stateless.FlightSchedulePlanSessionBeanRemote;
 import ejb.session.stateless.FlightScheduleSessionBeanRemote;
 import ejb.session.stateless.PassengerSessionBeanRemote;
@@ -36,6 +37,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import ejb.session.stateless.SeatSessionBeanRemote;
 
 /**
  *
@@ -49,6 +51,8 @@ public class MainApp {
     private FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote;
     private FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote;
     private PassengerSessionBeanRemote passengerSessionBeanRemote;
+    private SeatSessionBeanRemote seatSessionBeanRemote;
+    private FareSessionBeanRemote fareSessionbeanRemote;
     private Customer customer = null;
 
     MainApp() {
@@ -57,12 +61,16 @@ public class MainApp {
     MainApp(CustomerSessionBeanRemote customerSessionBeanRemote, AirportSessionBeanRemote airportSessionBeanRemote,
             FlightScheduleSessionBeanRemote flightScheduleSessionBeanRemote,
             FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBeanRemote,
-            PassengerSessionBeanRemote passengerSessionBeanRemote) {
+            PassengerSessionBeanRemote passengerSessionBeanRemote,
+            SeatSessionBeanRemote seatSessionBeanRemote,
+            FareSessionBeanRemote fareSessionBeanRemote) {
         this.customerSessionBeanRemote = customerSessionBeanRemote;
         this.airportSessionBeanRemote = airportSessionBeanRemote;
         this.flightScheduleSessionBeanRemote = flightScheduleSessionBeanRemote;
         this.flightSchedulePlanSessionBeanRemote = flightSchedulePlanSessionBeanRemote;
         this.passengerSessionBeanRemote = passengerSessionBeanRemote;
+        this.seatSessionBeanRemote = seatSessionBeanRemote;
+        this.fareSessionbeanRemote = fareSessionBeanRemote;
     }
 
     public void run() {
@@ -211,6 +219,7 @@ public class MainApp {
             flightSchedule = flightSchedules.get(index);
             SeatInventory seatInventory = selectCabinClass(flightSchedule);
             List<Seat> selectSeats = selectSeats(seatInventory, numPassengers);
+            double totalAmount = getTotalAmount(selectSeats);
         } else if (flightPreference == FlightType.CONNECTING && cabinTypePreference == null) {
             System.out.println("*** Connecting flights ***");
             index = displayConnectFlightSchedules(departureAirport, destinationAirport, departureDate,
@@ -218,6 +227,7 @@ public class MainApp {
             flightSchedule = flightSchedules.get(index);
             SeatInventory seatInventory = selectCabinClass(flightSchedule);
             List<Seat> selectSeats = selectSeats(seatInventory, numPassengers);
+            double totalAmount = getTotalAmount(selectSeats);
         } else if (flightPreference == null) {
             System.out.println("*** Direct flights ***");
             index = displayDirectFlightSchedules(departureAirport, destinationAirport, departureDate,
@@ -228,6 +238,7 @@ public class MainApp {
             flightSchedule = flightSchedules.get(index);
             SeatInventory seatInventory = selectCabinClass(flightSchedule);
             List<Seat> selectSeats = selectSeats(seatInventory, numPassengers);
+            double totalAmount = getTotalAmount(selectSeats);
         }
         if (tripType == tripType.ROUNDTRIP) {
             Long complementaryFlightSchedulePlanID = flightSchedule.getFlightSchedulePlan().getComplementaryFlightSchedulePlan().getFlightSchedulePlanID();
@@ -621,10 +632,12 @@ public class MainApp {
             System.out.print("> ");
             int answer = sc.nextInt();
             Seat seat = seats.get(answer - 1);
-            Passenger passenger = createPassenger();
+            Long passengerId = createPassenger();
+            seatSessionBeanRemote.addPassenger(passengerId, seat.getSeatID());
             selectedSeats.add(seat);
             seats.remove(seat);
         }
+        return selectedSeats;
     }
 
     private void displaySeats(List<Seat> seats) {
@@ -638,7 +651,7 @@ public class MainApp {
         }
     }
 
-    private Passenger createPassenger() {
+    private Long createPassenger() {
         System.out.println("*** Create passenger ***");
         sc.nextLine();
         System.out.print("Enter first name> ");
@@ -648,7 +661,17 @@ public class MainApp {
         System.out.print("Enter passport number> ");
         String passportNumber = sc.nextLine();
         Passenger passenger = new Passenger(firstName, lastName, passportNumber);
+        Long passengerId = passengerSessionBeanRemote.createPassenger(passenger);
+        return passengerId;
+    }
 
+    private double getTotalAmount(List<Seat> selectSeats) {
+        double totalAmount = 0;
+        for (Seat s : selectSeats) {
+            String fareBasisCode = s.getFareBasisCode();
+            totalAmount += fareSessionbeanRemote.retrieveFareByFareBasisCode(fareBasisCode).getFareAmount();
+        }
+        return totalAmount;
     }
 
 }

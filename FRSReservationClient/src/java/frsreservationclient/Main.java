@@ -9,6 +9,8 @@ import ejb.session.stateless.AirportSessionBeanRemote;
 import ejb.session.stateless.CustomerSessionBeanRemote;
 import ejb.session.stateless.FlightSchedulePlanSessionBeanRemote;
 import ejb.session.stateless.FlightScheduleSessionBeanRemote;
+import ejb.session.stateless.PassengerSessionBeanRemote;
+import ejb.session.stateless.SeatSessionBeanRemote;
 import javax.ejb.EJB;
 
 /**
@@ -17,6 +19,10 @@ import javax.ejb.EJB;
  */
 public class Main {
 
+    @EJB
+    private static PassengerSessionBeanRemote passengerSessionBean;
+    @EJB
+    private static SeatSessionBeanRemote seatSessionBean;
     @EJB
     private static FlightSchedulePlanSessionBeanRemote flightSchedulePlanSessionBean;
     @EJB
@@ -30,7 +36,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        MainApp mainApp = new MainApp(customerSessionBeanRemote, airportSessionBeanRemote, flightScheduleSessionBeanRemote, flightSchedulePlanSessionBean);
+        MainApp mainApp = new MainApp(customerSessionBeanRemote, airportSessionBeanRemote, flightScheduleSessionBeanRemote, flightSchedulePlanSessionBean, passengerSessionBean, seatSessionBean);
         mainApp.run();
     }
 

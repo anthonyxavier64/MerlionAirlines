@@ -15,6 +15,6 @@ import javax.ejb.Remote;
 @Remote
 public interface PassengerSessionBeanRemote {
 
-    Long businessMethod(Passenger passenger);
+    Long createPassenger(Passenger passenger);
     
 }
