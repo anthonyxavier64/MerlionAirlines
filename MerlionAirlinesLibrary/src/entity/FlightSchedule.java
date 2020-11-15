@@ -96,7 +96,9 @@ public class FlightSchedule implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.FlightSchedule[ id=" + flightScheduleID + " ]";
+        return "Departure date and time (local time) -> " + getDepartureDateTime() + "; Arrival date and time (local time) ->  " 
+                    + getArrivalDateTime() + "; Duration -> " 
+                    + getDuration();
     }
 
     public LocalDateTime getDepartureDateTime() {
@@ -116,7 +118,7 @@ public class FlightSchedule implements Serializable {
     }
 
     public LocalDateTime getArrivalDateTime() {
-        return departureDateTime.plus(duration);
+        return departureDateTime.plus(duration).minusHours(flightSchedulePlan.getFlight().getFlightRoute().getTimeZoneDifference());
     }
 
     public FlightSchedulePlan getFlightSchedulePlan() {

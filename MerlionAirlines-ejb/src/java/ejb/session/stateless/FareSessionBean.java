@@ -46,5 +46,22 @@ public class FareSessionBean implements FareSessionBeanRemote, FareSessionBeanLo
         flightSchedulePlan.getFares().add(newFare);
         return newFare.getFareID();
     }
+    
+    @Override
+    public long changeFare(long fspId, long oldFareId, Fare newFare) {
+        FlightSchedulePlan fsp = em.find(FlightSchedulePlan.class, fspId);
+        Fare oldFare = em.find(Fare.class, oldFareId);
+        CabinClassConfiguration ccc = em.find(CabinClassConfiguration.class, oldFare.getCabinClassConfiguration().getCabinClassID());
+        ccc.getFares().remove(oldFare);
+        fsp.getFares().remove(oldFare);
+        newFare.setCabinClassConfiguration(ccc);
+        newFare.setFlightSchedulePlan(fsp);
+        em.remove(oldFare);
+        em.persist(newFare);
+        em.flush();
+        ccc.getFares().add(newFare);
+        fsp.getFares().add(newFare);
+        return newFare.getFareID();
+    }
         
 }

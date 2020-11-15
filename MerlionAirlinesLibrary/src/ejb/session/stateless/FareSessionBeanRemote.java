@@ -16,4 +16,5 @@ import javax.ejb.Remote;
 public interface FareSessionBeanRemote {
     Fare retrieveFareByFareBasisCode(String fareBasisCode);
     public Long addFareToFlightSchedulePlan(Long fspId, Long cabinClassConfigId, Fare newFare);
+    public long changeFare(long fspId, long oldFareId, Fare newFare);
 }

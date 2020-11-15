@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.AircraftConfiguration;
+import entity.CabinClassConfiguration;
 import entity.Flight;
 import entity.FlightRoute;
 import enumeration.TripType;
@@ -60,6 +61,9 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
         query.setParameter("flightNumber", "ML" + flightNumber);
         try {
             Flight flight = (Flight) query.getSingleResult();
+            if (!flight.isEnabled()) {
+                throw new FlightDoesNotExistException("Flight has been disabled!");
+            }
             List<FlightSchedulePlan> flightSchedulePlans = flight.getFlightSchedulePlans();
             for (FlightSchedulePlan f : flightSchedulePlans) {
                 List<FlightSchedule> flightSchedules = f.getFlightSchedules();
@@ -90,6 +94,7 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
             complementaryFlight = (Flight) query.getSingleResult();
         }
         originalFlight.setComplementaryFlight(complementaryFlight);
+        complementaryFlight.setComplementaryFlight(originalFlight);
         complementaryFlight.setTwoWay(true);
         return complementaryFlight.getFlightID();
     }
@@ -100,10 +105,25 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
         List<Flight> flights = query.getResultList();
         List<Flight> flightsFiltered = new ArrayList<>();
         for (Flight f : flights) {
-            if (f.getComplementaryFlight() != null && f.isTwoWay()) {
+            if (!f.isEnabled()) {
+                continue;
+            }
+            
+            f.getFlightRoute().getOrigin();
+            f.getFlightRoute().getDestination();
+            f.getAircraftConfiguration().getCabinClassConfigurations().size();
+            f.getAircraftConfiguration().getAircraftType();
+            f.getFlightRoute().getComplementaryFlightRoute();
+            f.getComplementaryFlight();
+            f.getFlightSchedulePlans().size();
+            for(CabinClassConfiguration ccc : f.getAircraftConfiguration().getCabinClassConfigurations()) {
+                ccc.getSeatNumbers();
+            }
+            
+            if (f.getComplementaryFlight() != null && !flightsFiltered.contains(f.getComplementaryFlight())) {
                 flightsFiltered.add(f);
                 flightsFiltered.add(f.getComplementaryFlight());
-            } else if (f.getComplementaryFlight() == null && !f.isTwoWay()) {
+            } else if (f.getComplementaryFlight() == null) {
                 flightsFiltered.add(f);
             }
         }
@@ -116,6 +136,9 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
         query.setParameter("flightNumber", "ML" + flightNumber);
         try {
             Flight flight = (Flight) query.getSingleResult();
+            if (!flight.isEnabled()) {
+                throw new FlightDoesNotExistException("Flight has been disabled1");
+            }
             flight.getAircraftConfiguration().getCabinClassConfigurations().size();
             flight.getFlightRoute();
             return flight;
@@ -127,7 +150,7 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
     @Override
     public Flight updateFlightNumber(String flightNumber, String newFlightNumber) throws FlightDoesNotExistException {
         Flight flight = retrieveFlightByFlightNumber(flightNumber);
-        flight.setFlightNumber(newFlightNumber);
+        flight.setFlightNumber("ML" + newFlightNumber);
         em.persist(flight);
         em.flush();
         return flight;
@@ -153,18 +176,33 @@ public class FlightSessionBean implements FlightSessionBeanRemote, FlightSession
 
     @Override
     public int removeFlight(String flightNumber) {
+        boolean hasBeenBooked = false;
         try {
             Flight flight = retrieveFlightByFlightNumber(flightNumber);
 
-            if (flight.getFlightSchedulePlans().size() == 0) {
+            List<FlightSchedulePlan> fsps = flight.getFlightSchedulePlans();
+            for (FlightSchedulePlan fsp : fsps) {
+                for (FlightSchedule fs : fsp.getFlightSchedules()) {
+                    if (fs.getFlightReservations().size() != 0) {
+                        hasBeenBooked = true;
+                        break;
+                    }
+                    if (hasBeenBooked) {
+                        break;
+                    }
+                }
+            }
+            
+            if (!hasBeenBooked) {
                 // Diassociate flight from flight route
                 FlightRoute flightRoute = flight.getFlightRoute();
                 flightRoute.getFlights().remove(flight);
 
-                // Diassociate flight from complementary flight
-                Flight complementaryFlight = flight.getComplementaryFlight();
-                complementaryFlight.setComplementaryFlight(null);
-                complementaryFlight.setTwoWay(false);
+                if (flight.getComplementaryFlight() != null) {
+                    Flight complementaryFlight = flight.getComplementaryFlight();
+                    complementaryFlight.setComplementaryFlight(null);
+                    complementaryFlight.setTwoWay(false);
+                }
 
                 em.remove(flight);
                 em.flush();

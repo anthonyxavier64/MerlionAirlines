@@ -62,6 +62,7 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
         }
         originalFlightRoute.setComplementaryFlightRoute(complementaryFlightRoute);
         complementaryFlightRoute.setTwoWay(true);
+        complementaryFlightRoute.setComplementaryFlightRoute(originalFlightRoute);
         return complementaryFlightRoute.getFlightRouteId();
     }
     
@@ -71,10 +72,14 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
         List<FlightRoute> flightRoutes = query.getResultList();
         List<FlightRoute> flightRoutesFiltered = new ArrayList<>();
         for (FlightRoute f : flightRoutes) {
-            if (f.getComplementaryFlightRoute() != null && f.isTwoWay()) {
+            if (!f.isEnabled()) {
+                continue;
+            }
+            if (f.getComplementaryFlightRoute() != null && !flightRoutesFiltered.contains(f.getComplementaryFlightRoute())) {
                 flightRoutesFiltered.add(f);
                 flightRoutesFiltered.add(f.getComplementaryFlightRoute());
-            } else if (f.getComplementaryFlightRoute() == null && !f.isTwoWay()) {
+
+            } else if (f.getComplementaryFlightRoute() == null) {
                 flightRoutesFiltered.add(f);
             }
         }
@@ -84,18 +89,28 @@ public class FlightRouteSessionBean implements FlightRouteSessionBeanRemote, Fli
     @Override
     public void deleteFlightRoute(Long flightRouteId) {
         FlightRoute flightRoute = em.find(FlightRoute.class, flightRouteId);
-        if (flightRoute.isTwoWay()) {
-            if (flightRoute.getComplementaryFlightRoute() == null) {
-                Query query = em.createQuery("SELECT f FROM FlightRoute f WHERE f.origin = :origin AND f.destination = :destination");
-                query.setParameter("origin", flightRoute.getDestination());
-                query.setParameter("destination", flightRoute.getOrigin());
-                FlightRoute originalFlightRoute = (FlightRoute) query.getSingleResult();
-                originalFlightRoute.setTwoWay(false);
-                originalFlightRoute.setComplementaryFlightRoute(null);
-            } else {
-                flightRoute.getComplementaryFlightRoute().setTwoWay(false);
+
+        // Flight route can only be removed if not in used (i.e. not added to a flight)
+        if (!flightRoute.getFlights().isEmpty()) {
+            if (flightRoute.isTwoWay()) {
+                FlightRoute complfr = em.find(FlightRoute.class, flightRoute.getComplementaryFlightRoute().getFlightRouteId());
+                flightRoute.setTwoWay(false);
+                complfr.setTwoWay(false);
+                complfr.setComplementaryFlightRoute(null);
+                flightRoute.setComplementaryFlightRoute(null);
             }
+            flightRoute.setEnabled(false);
+            return;
         }
+
+        if (flightRoute.isTwoWay()) {
+            FlightRoute complfr = em.find(FlightRoute.class, flightRoute.getComplementaryFlightRoute().getFlightRouteId());
+            flightRoute.setTwoWay(false);
+            complfr.setTwoWay(false);
+            complfr.setComplementaryFlightRoute(null);
+            flightRoute.setComplementaryFlightRoute(null);
+        }
+        
         em.remove(flightRoute);
     }
     

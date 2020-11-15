@@ -5,6 +5,7 @@
  */
 package entity;
 
+import enumeration.FSPType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,23 @@ public class FlightSchedulePlan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightSchedulePlanID;
 
+    private Boolean enabled = true;
+    
+    private FSPType flightSchedulePlanType;
+
+    
+    public FSPType getFlightSchedulePlanType() {
+        return flightSchedulePlanType;
+    }
+
+    public void setFlightSchedulePlanType(FSPType flightSchedulePlanType) {
+        this.flightSchedulePlanType = flightSchedulePlanType;
+    }
+
+    public FlightSchedulePlan(FSPType flightSchedulePlanType) {
+        this.flightSchedulePlanType = flightSchedulePlanType;
+    }
+    
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Flight flight;
@@ -44,7 +62,7 @@ public class FlightSchedulePlan implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     private FlightSchedulePlan complementaryFlightSchedulePlan;
-
+   
     public FlightSchedulePlan() {
     }
     
@@ -111,6 +129,18 @@ public class FlightSchedulePlan implements Serializable {
 
     public void setFares(List<Fare> fares) {
         this.fares = fares;
+    }
+    
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

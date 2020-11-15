@@ -99,7 +99,12 @@ public class Airport implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Airport[ id=" + airportID + " ]";
+        return "Aiport name: " + getAirportName() + 
+                "; Country : " + getCountry() +
+                "; City : " + getCity() +
+                "; State : " + getState() +
+                "; IATA Code: " + getIATACode() +
+                "; Timezone " + getTimeZone();
     }
 
     public String getAirportName() {

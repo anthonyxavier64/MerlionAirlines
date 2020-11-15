@@ -31,7 +31,7 @@ public class Fare implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fareID;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @NotNull
     private CabinType cabinType;
 
@@ -67,6 +67,12 @@ public class Fare implements Serializable {
     public void setFareID(Long fareID) {
         this.fareID = fareID;
     }
+    
+    
+    @Override
+    public String toString() {
+        return "Fare basis code -> " + fareBasisCode + "; Cabin type -> " + cabinType.name() + "; Fare amount -> " + fareAmount;
+    }
 
     @Override
     public int hashCode() {
@@ -86,11 +92,6 @@ public class Fare implements Serializable {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.Fare[ id=" + fareID + " ]";
     }
 
     public String getFareBasisCode() {
