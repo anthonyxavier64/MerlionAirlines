@@ -29,5 +29,7 @@ public interface FlightScheduleSessionBeanLocal {
     List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers);
 
     List<FlightSchedule> getConnectingFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers);
+
+    public int deleteFlightSchedule(long fsId);
     
 }

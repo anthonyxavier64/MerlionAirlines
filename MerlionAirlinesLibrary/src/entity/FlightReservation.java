@@ -33,7 +33,7 @@ public class FlightReservation implements Serializable {
 
     @Column(nullable = false)
     @NotNull
-    BigDecimal totalAmount;
+    private double totalAmount;
 
     private String partnerName;
 
@@ -51,7 +51,7 @@ public class FlightReservation implements Serializable {
     public FlightReservation() {
     }
 
-    public FlightReservation(BigDecimal totalAmount, String partnerName) {
+    public FlightReservation(double totalAmount, String partnerName) {
         this.totalAmount = totalAmount;
         this.partnerName = partnerName;
     }
@@ -119,6 +119,14 @@ public class FlightReservation implements Serializable {
 
     public void setSeats(List<Seat> seats) {
         this.seats = seats;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
 }

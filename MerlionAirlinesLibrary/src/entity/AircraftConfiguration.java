@@ -44,7 +44,7 @@ public class AircraftConfiguration implements Serializable {
     private AircraftType aircraftType;
 
     @OneToMany(mappedBy = "aircraftConfiguration")
-    private List<CabinClassConfiguration> cabinClassConfigurations = new ArrayList<CabinClassConfiguration>();
+    private List<CabinClassConfiguration> cabinClassConfigurations = new ArrayList<>();
 
     public AircraftConfiguration() {
     }
