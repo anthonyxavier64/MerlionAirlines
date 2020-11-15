@@ -89,21 +89,46 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
     }
 
     @Override
-    public List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers) {
-        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination = :destinationAirport AND fs.departureDateTime = :departureDate");
+    public List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, LocalDate depatureDate, Integer numPassengers, enumeration.CabinType cabinType) {
+        Query query;
+        query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination = :destinationAirport");
         query.setParameter("departureAirport", departureAirport);
         query.setParameter("destinationAirport", destinationAirport);
-        query.setParameter("depatureDate", depatureDate);
         List<FlightSchedule> flightSchedules = query.getResultList();
         List<FlightSchedule> flightSchedulesFiltered = new ArrayList<>();
         for (FlightSchedule f : flightSchedules) {
-            int availableSeats = 0;
-            List<SeatInventory> seatInventories = f.getSeatInventories();
-            for (SeatInventory s : seatInventories) {
-                availableSeats += s.getAvailableSeats();
-                if (availableSeats >= numPassengers) {
-                    flightSchedulesFiltered.add(f);
-                    break;
+            if (cabinType != null) {
+                List<SeatInventory> seatInventories = f.getSeatInventories();
+                boolean consistCabinType = false;
+                for (SeatInventory s : seatInventories) {
+                    if (s.getCabinClassConfiguration().getCabinType() == cabinType) {
+                        consistCabinType = true;
+                    }
+                }
+                if (consistCabinType) {
+                    if (f.getDepartureDateTime().toLocalDate().isEqual(depatureDate)) {
+                        int availableSeats = 0;
+                        seatInventories = f.getSeatInventories();
+                        for (SeatInventory s : seatInventories) {
+                            availableSeats += s.getAvailableSeats();
+                            if (availableSeats >= numPassengers) {
+                                flightSchedulesFiltered.add(f);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (f.getDepartureDateTime().toLocalDate().isEqual(depatureDate)) {
+                    int availableSeats = 0;
+                    List<SeatInventory> seatInventories = f.getSeatInventories();
+                    for (SeatInventory s : seatInventories) {
+                        availableSeats += s.getAvailableSeats();
+                        if (availableSeats >= numPassengers) {
+                            flightSchedulesFiltered.add(f);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -111,21 +136,46 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
     }
 
     @Override
-    public List<FlightSchedule> getConnectingFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers) {
-        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination <> :destinationAirport AND fs.departureDateTime = :departureDate");
+    public List<FlightSchedule> getConnectingFlightSchedules(Airport departureAirport, Airport destinationAirport, LocalDate depatureDate, Integer numPassengers, CabinType cabinType) {
+        Query query = em.createQuery("SELECT fs FROM FlightSchedule fs WHERE fs.flightSchedulePlan.flight.flightRoute.origin = :departureAirport AND fs.flightSchedulePlan.flight.flightRoute.destination <> :destinationAirport");
         query.setParameter("departureAirport", departureAirport);
         query.setParameter("destinationAirport", destinationAirport);
-        query.setParameter("depatureDate", depatureDate);
         List<FlightSchedule> flightSchedulesFiltered = new ArrayList<>();
         List<FlightSchedule> flightSchedules = query.getResultList();
         for (FlightSchedule f : flightSchedules) {
-            int availableSeats = 0;
-            List<SeatInventory> seatInventories = f.getSeatInventories();
-            for (SeatInventory s : seatInventories) {
-                availableSeats += s.getAvailableSeats();
-            }
-            if (availableSeats < numPassengers) {
-                flightSchedules.remove(f);
+            if (cabinType != null) {
+                List<SeatInventory> seatInventories = f.getSeatInventories();
+                boolean consistCabinType = false;
+                for (SeatInventory s : seatInventories) {
+                    if (s.getCabinClassConfiguration().getCabinType() == cabinType) {
+                        consistCabinType = true;
+                    }
+                }
+                if (consistCabinType) {
+                    if (f.getDepartureDateTime().toLocalDate().isEqual(depatureDate)) {
+                        int availableSeats = 0;
+                        seatInventories = f.getSeatInventories();
+                        for (SeatInventory s : seatInventories) {
+                            availableSeats += s.getAvailableSeats();
+                        }
+                        if (availableSeats < numPassengers) {
+                            flightSchedules.remove(f);
+                        }
+                    }
+                } else {
+                    flightSchedules.remove(f);
+                }
+            } else {
+                if (f.getDepartureDateTime().toLocalDate().isEqual(depatureDate)) {
+                    int availableSeats = 0;
+                    List<SeatInventory> seatInventories = f.getSeatInventories();
+                    for (SeatInventory s : seatInventories) {
+                        availableSeats += s.getAvailableSeats();
+                    }
+                    if (availableSeats < numPassengers) {
+                        flightSchedules.remove(f);
+                    }
+                }
             }
         }
         for (FlightSchedule f : flightSchedules) {
@@ -135,13 +185,32 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
                 FlightSchedule cf = (FlightSchedule) query.getSingleResult();
                 long hours = ChronoUnit.HOURS.between(f.getArrivalDateTime(), cf.getDepartureDateTime());
                 List<SeatInventory> seatInventories = cf.getSeatInventories();
-                int availableSeats = 0;
-                for (SeatInventory s : seatInventories) {
-                    availableSeats += s.getAvailableSeats();
-                }
-                if (hours <= 24 && hours > 0 && availableSeats >= numPassengers) {
-                    flightSchedulesFiltered.add(f);
-                    flightSchedulesFiltered.add(cf);
+                if (cabinType != null) {
+                    boolean consistCabinType = false;
+                    for (SeatInventory s : seatInventories) {
+                        if (s.getCabinClassConfiguration().getCabinType() == cabinType) {
+                            consistCabinType = true;
+                        }
+                    }
+                    if (consistCabinType) {
+                        int availableSeats = 0;
+                        for (SeatInventory s : seatInventories) {
+                            availableSeats += s.getAvailableSeats();
+                        }
+                        if (hours <= 24 && hours > 0 && availableSeats >= numPassengers) {
+                            flightSchedulesFiltered.add(f);
+                            flightSchedulesFiltered.add(cf);
+                        }
+                    }
+                } else {
+                    int availableSeats = 0;
+                    for (SeatInventory s : seatInventories) {
+                        availableSeats += s.getAvailableSeats();
+                    }
+                    if (hours <= 24 && hours > 0 && availableSeats >= numPassengers) {
+                        flightSchedulesFiltered.add(f);
+                        flightSchedulesFiltered.add(cf);
+                    }
                 }
             } catch (NoResultException ex) {
                 continue;

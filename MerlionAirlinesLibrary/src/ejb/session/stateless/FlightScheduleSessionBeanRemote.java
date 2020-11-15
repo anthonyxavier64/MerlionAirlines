@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Airport;
 import entity.FlightSchedule;
+import enumeration.CabinType;
 import exception.FlightScheduleAlreadyExistException;
 import exception.FlightSchedulesOverlapException;
 import java.time.Duration;
@@ -25,9 +26,9 @@ public interface FlightScheduleSessionBeanRemote {
 
     public void addRecurringFlightSchedules(Long flightSchedulePlanId, LocalDateTime startDateTime, Duration duration, LocalDateTime endDateTime, Integer intervalByDays);
 
-    List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers);
+    List<FlightSchedule> getFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers, enumeration.CabinType cabinType);
 
-    List<FlightSchedule> getConnectingFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers);
+    List<FlightSchedule> getConnectingFlightSchedules(Airport departureAirport, Airport destinationAirport, java.time.LocalDate depatureDate, Integer numPassengers, CabinType cabinType);
 
     public int deleteFlightSchedule(long fsId);
 }
